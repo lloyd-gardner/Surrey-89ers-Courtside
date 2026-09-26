@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>89ers Courtside</title>
+<meta name="theme-color" content="#0E1512">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Courtside">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<style>
+:root{
+  color-scheme: dark;
+  --ground:#0E1512; --surface:#141C18; --raised:#1B2621; --line:#2B3A33; --line-soft:#1F2A25;
+  --ink:#EEF3EF; --muted:#A3B4AA; --faint:#7F9187;
+  --accent:#2FBF71; --accent-ink:#06120B; --accent-soft:#18251E; --accent-line:#2F6B4A;
+  --amber:#F2A23A; --amber-ink:#1A0F02;
+  --display:'Avenir Next Condensed','Barlow Condensed','Arial Narrow',sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+}
+html,body{background:var(--ground);color:var(--ink)}
+body{font-family:var(--body);font-size:15px;line-height:1.35;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation;-webkit-appearance:none;appearance:none}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#app{padding:12px 16px 20px;max-width:1400px;margin:0 auto}
+.num{font-variant-numeric:tabular-nums}
+.h{font-family:var(--display);font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin:0}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line-soft);border-radius:18px;padding:12px 14px}
+.stack{display:grid;grid-gap:10px;gap:10px;align-content:start}
+.row{display:flex;align-items:center}
+.row>*+*{margin-left:8px}
+.spread{display:flex;align-items:center;justify-content:space-between}
+
+.btn{min-height:44px;border:1px solid var(--line);background:var(--raised);color:var(--ink);border-radius:12px;font-weight:600;font-size:15px;padding:0 12px;line-height:1.15}
+.btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.echo.on{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
+.btn.ghost{background:transparent}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.warn{background:#3A1E14;border-color:#8A3B22;color:#FFD9CC}
+.btn[disabled]{background:#222C27;border-color:#26332D;color:var(--faint);cursor:default}
+.btn.big{min-height:54px;font-size:18px;border-radius:14px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:8px;gap:8px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:6px;gap:6px}
+.g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-gap:6px;gap:6px}
+.g5 .btn{padding:0 2px;font-size:13px}
+.g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-gap:6px;gap:6px}
+.g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-gap:6px;gap:6px}
+.s3{grid-column:span 3}.s4{grid-column:span 4}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;flex-shrink:0;vertical-align:middle}
+
+/* top bar */
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;grid-gap:12px;gap:12px;padding-bottom:10px}
+.crest{width:42px;height:42px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:19px;flex-shrink:0}
+.score{text-align:center}
+.score .big{font-family:var(--display);font-weight:700;font-size:38px;line-height:1}
+.tabs{display:inline-grid;grid-auto-flow:column;grid-gap:4px;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.tab{min-height:44px;padding:0 14px;border:0;border-radius:10px;background:transparent;color:var(--ink);font-weight:600;font-size:15px}
+.tab.on{background:var(--accent);color:var(--accent-ink)}
+.qbar{display:flex;align-items:center;flex-wrap:wrap;padding:0 0 6px}
+.qbar>*{margin:0 8px 6px 0}
+.seg{display:inline-grid;grid-auto-flow:column;grid-gap:3px;gap:3px;padding:3px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.seg button{min-height:40px;min-width:46px;padding:0 10px;border:0;border-radius:9px;background:transparent;color:var(--ink);font-weight:600;font-size:14px}
+.seg button.on{background:var(--ink);color:var(--ground)}
+.status{font-size:13px;color:var(--muted);display:inline-flex;align-items:center}
+.status .dot{border-radius:50%;margin-right:6px}
+
+/* log */
+.log-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1fr);grid-gap:12px;gap:12px;align-items:start}
+.src{min-height:56px;text-align:left;padding:8px 11px;display:flex;flex-direction:column;justify-content:space-between}
+.src .nm{font-size:15px;display:flex;align-items:center}
+.src .nm .dot{margin-right:8px}
+.src .sub{font-size:12px;font-weight:500;display:flex;justify-content:space-between;color:var(--muted)}
+.src.on .sub{color:#0B2A18}
+.src .early{letter-spacing:.08em;font-weight:700}
+.jersey{min-height:44px;font-family:var(--display);font-size:20px;font-weight:700;padding:0}
+.roles{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-gap:6px;gap:6px}
+.role{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px}
+.role .who{font-family:var(--display);font-size:20px;font-weight:700;line-height:1}
+.role .rl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.role.on{background:var(--accent-soft);border-color:var(--accent);color:var(--ink)}
+.empty{border:1px dashed #33443B;border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
+.recent{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 96px;grid-gap:10px;gap:10px;margin-top:10px}
+.rc{background:var(--surface);border:1px solid var(--line-soft);border-radius:14px;padding:9px 12px;min-width:0}
+.rc .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc .d{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.echo-txt{font-size:12px;color:var(--muted);min-height:16px}
+.edit-banner{background:#2A2413;border:1px solid #6B5320;color:#FBE6BD;border-radius:12px;padding:8px 12px;margin-bottom:10px}
+.sample-banner{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:12px;font-weight:600;max-width:90%;z-index:10}
+
+/* list + tables */
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:7px 8px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.tbl td.r,.tbl th.r{text-align:right}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.bar{height:10px;background:var(--raised);border-radius:5px;position:relative;min-width:60px}
+.bar span{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:12px;gap:12px}
+.kpi .v{font-family:var(--display);font-weight:700;font-size:44px;line-height:1}
+.sum-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);grid-gap:12px;gap:12px;margin-top:12px;align-items:start}
+
+/* home */
+.home-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-gap:14px;gap:14px;align-items:start}
+.field{display:grid;grid-gap:6px;gap:6px}
+.field input[type=text],.field input[type=date]{min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--raised);padding:0 12px;font-size:16px;width:100%}
+.gitem{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-gap:10px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.gitem:last-child{border-bottom:0}
+.gbtns{display:grid;grid-auto-flow:column;grid-gap:6px;gap:6px}
+.hint{font-size:13px;color:var(--muted);line-height:1.45}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:6px;background:var(--accent-soft);color:#9BE3BC;border:1px solid var(--accent-line);vertical-align:middle}
+
+@media (max-width: 900px){
+  .log-grid,.sum-grid,.home-grid{grid-template-columns:minmax(0,1fr)}
+  .recent{grid-template-columns:minmax(0,1fr) 96px}
+  .recent .rc:nth-child(n+2){display:none}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .top{grid-template-columns:minmax(0,1fr) auto}
+  .top .score{display:none}
+}
+@media (max-width: 520px){
+  .tab{padding:0 10px;font-size:14px}
+  .kpi .v{font-size:34px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div id="app" aria-live="polite"></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Config: edit these lists to change the buttons ---------- */
+  var OTHER = '#9085e9';
+  var SOURCES = [
+    { id: 'Transition', color: '#3987e5', early: true, finishes: ['Run-out', 'Off our TO', 'Early 1-on-1', 'Trail three', 'Drag PNR', 'Spot up'] },
+    { id: 'PNR', color: '#d95926', screen: true, cov: true, finishes: ['Roll man', 'Drive middle', 'Drive baseline', 'Pull-up', 'Pass out', 'Pop', 'Spain', 'Reject'] },
+    { id: '1-on-1', color: '#199e70', finishes: ['Drive left', 'Drive right', 'Pull-up', 'Step-back'] },
+    { id: 'Post up', color: '#c98500', finishes: ['Middle hook', 'Baseline turn', 'Face-up J', 'Kick out', 'Cutter'] },
+    { id: 'Off. rebound', color: '#d55181', early: true, finishes: ['Put back', 'Kick out', 'Reset'] },
+    { id: 'Cut', color: OTHER, finishes: ['Baseline', '45 cut', 'Backdoor'] },
+    { id: 'Off-ball screen', color: OTHER, screen: true, finishes: ['Curl', 'Flare', 'Straight', 'Slip'] },
+    { id: 'Handoff', color: OTHER, screen: true, cov: true, finishes: ['Keep', 'Pull-up', 'Pass'] },
+    { id: 'Spot up', color: OTHER, finishes: ['Catch & shoot', 'Closeout drive'] },
+    { id: 'Out of bounds', color: OTHER, finishes: ['SLOB', 'BLOB', 'ATO'] },
+    { id: 'Zone', color: OTHER, finishes: ['Short corner', 'Skip', 'High post'] },
+    { id: 'Other', color: OTHER, finishes: ['Foul', 'Loose ball', 'Other'] }
+  ];
+  var WHERE = ['L side', 'L slot', 'Middle', 'R slot', 'R side'];
+  var COVS = ['Drop', 'Hedge', 'Switch', 'Ice', 'Blitz', 'Late'];
+  var RESULTS = [
+    { id: '2', label: '2 pts', pts: 2, span: 's3' },
+    { id: '3', label: '3 pts', pts: 3, span: 's3' },
+    { id: '2+1', label: '2 + 1', pts: 3, span: 's3' },
+    { id: '3+1', label: '3 + 1', pts: 4, span: 's3' },
+    { id: 'FTs', label: 'FTs', pts: null, span: 's4' },
+    { id: 'Miss', label: 'Miss', pts: 0, span: 's4' },
+    { id: 'TO', label: 'Turnover', pts: 0, span: 's4' }
+  ];
+  var ECHOES = ['Make contact in tagging up', 'Contest every shot', 'Guard your man without help for two dribbles',
+    'Win the physicality battle', "Don't get screened", 'Apply our defensive pressure points'];
+  var QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4', 'OT'];
+
+  /* ---------- Storage (this device only; works with no internet) ---------- */
+  var PREFIX = 'cs89.';
+  var storageOK = true;
+  function sget(k) {
+    try { var v = window.localStorage.getItem(PREFIX + k); return v ? JSON.parse(v) : null; }
+    catch (e) { storageOK = false; return null; }
+  }
+  function sset(k, v) {
+    try { window.localStorage.setItem(PREFIX + k, JSON.stringify(v)); return true; }
+    catch (e) { storageOK = false; return false; }
+  }
+  function sdel(k) { try { window.localStorage.removeItem(PREFIX + k); } catch (e) {} }
+  (function probe() {
+    try { window.localStorage.setItem(PREFIX + 'probe', '1'); window.localStorage.removeItem(PREFIX + 'probe'); }
+    catch (e) { storageOK = false; }
+  })();
+
+  var games = {};
+  var order = [];
+
+  function persistIndex() { sset('index', order); }
+  function saveGame(g) {
+    g.updated = Date.now();
+    games[g.id] = g;
+    if (order.indexOf(g.id) < 0) order.unshift(g.id);
+    sset('game.' + g.id, g);
+    persistIndex();
+  }
+  function deleteGame(id) {
+    if (id === 'sample') sset('sampleDismissed', true);
+    delete games[id];
+    var i = order.indexOf(id);
+    if (i >= 0) order.splice(i, 1);
+    sdel('game.' + id);
+    persistIndex();
+  }
+  function loadAll() {
+    var ids = sget('index') || [];
+    for (var i = 0; i < ids.length; i++) {
+      var g = sget('game.' + ids[i]);
+      if (g && g.id) { games[g.id] = g; order.push(g.id); }
+    }
+  }
+
+  /* ---------- Helpers ---------- */
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function todayISO() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function hms(t) { var d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+  function niceDate(iso) {
+    if (!iso) return '';
+    var p = iso.split('-');
+    var m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][Number(p[1]) - 1] || '';
+    return Number(p[2]) + ' ' + m + ' ' + p[0];
+  }
+  function srcDef(id) { for (var i = 0; i < SOURCES.length; i++) if (SOURCES[i].id === id) return SOURCES[i]; return null; }
+  function resDef(id) { for (var i = 0; i < RESULTS.length; i++) if (RESULTS[i].id === id) return RESULTS[i]; return null; }
+  function ptsFor(res, ft) { var r = resDef(res); if (!r) return 0; return r.pts === null ? (ft || 0) : r.pts; }
+  function resText(p) {
+    if (p.res === 'FTs') return 'FTs ' + (p.ft || 0) + ' made';
+    if (p.res === 'Miss') return 'Miss';
+    if (p.res === 'TO') return 'Turnover';
+    return p.pts + ' pts' + (p.res.indexOf('+1') > 0 ? ' (and-1)' : '');
+  }
+  function parseRoster(s) {
+    var parts = String(s || '').split(/[\s,;\/]+/), out = [];
+    for (var i = 0; i < parts.length; i++) {
+      var n = parts[i].replace(/[^0-9]/g, '');
+      if (n.length && n.length <= 2 && out.indexOf(n) < 0) out.push(n);
+    }
+    out.sort(function (a, b) { return Number(a) - Number(b) || a.length - b.length; });
+    return out;
+  }
+  function gamePts(g) { var t = 0; for (var i = 0; i < g.poss.length; i++) t += g.poss[i].pts; return t; }
+  function blankForm() {
+    return { src: null, fin: null, where: null, cov: null, res: null, ft: null, creator: null, screener: null, scorer: null, echoes: [] };
+  }
+
+  /* ---------- Sample game (so the app opens in a working state) ---------- */
+  function makeSample() {
+    var d = new Date(); d.setHours(19, 30, 0, 0);
+    var base = d.getTime();
+    var rows = [
+      [1, 'PNR', 'Roll man', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
+      [1, '1-on-1', 'Drive right', 'L side', null, '2', null, '3', null, '3', [3]],
+      [1, 'Transition', 'Run-out', null, null, '2', null, '7', null, '7', []],
+      [1, 'PNR', 'Pull-up', 'Middle', 'Switch', 'Miss', null, '3', '11', '3', []],
+      [1, 'Post up', 'Middle hook', null, null, '2', null, '23', null, '23', [4]],
+      [1, 'PNR', 'Pass out', 'R slot', 'Drop', '3', null, '3', '11', '14', [2]],
+      [1, 'Off. rebound', 'Put back', null, null, '2', null, '11', null, '11', [1]],
+      [1, 'Transition', 'Early 1-on-1', null, null, '2', null, '7', null, '7', []],
+      [1, '1-on-1', 'Drive left', null, null, 'FTs', 2, '14', null, '14', [3]],
+      [1, 'Out of bounds', 'SLOB', null, null, '2', null, null, null, '21', []],
+      [1, '1-on-1', 'Pull-up', null, null, 'Miss', null, '14', null, '14', []],
+      [2, 'PNR', 'Drive middle', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]],
+      [2, 'Post up', 'Baseline turn', null, null, '2', null, '23', null, '23', [4]],
+      [2, 'Off. rebound', 'Put back', null, null, '2', null, '11', null, '11', [1]],
+      [2, 'Transition', 'Off our TO', null, null, '2+1', null, '7', null, '7', [2]],
+      [2, 'Transition', 'Run-out', null, null, '2', null, '7', null, '7', []],
+      [2, 'Transition', 'Off our TO', null, null, '2+1', null, '5', null, '5', [2]],
+      [2, 'PNR', 'Roll man', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
+      [2, 'Spot up', 'Catch & shoot', null, null, 'Miss', null, null, null, '32', []],
+      [2, '1-on-1', 'Pull-up', null, null, '2', null, '3', null, '3', []],
+      [2, 'Off. rebound', 'Kick out', null, null, '3', null, '11', null, '7', [1]],
+      [2, 'PNR', 'Pull-up', 'L side', 'Ice', 'TO', null, '3', '11', null, []],
+      [2, 'PNR', 'Pull-up', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]]
+    ];
+    var g = { id: 'sample', sample: true, opp: 'Example opponent', date: todayISO(), venue: 'Home',
+      roster: ['0', '3', '5', '7', '11', '14', '21', '23', '32'], curQ: 'Q2', marks: { Q1: base, Q2: base + 14 * 60000 }, poss: [], created: Date.now() };
+    var qCount = { 1: 0, 2: 0 };
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i], s = srcDef(r[1]);
+      qCount[r[0]]++;
+      var t = (r[0] === 1 ? base : base + 14 * 60000) + qCount[r[0]] * 48000;
+      g.poss.push({ id: 's' + i, n: i + 1, q: 'Q' + r[0], t: t, src: r[1], fin: r[2], where: r[3], cov: s.cov ? r[4] : null,
+        res: r[5], ft: r[6], pts: ptsFor(r[5], r[6]), creator: r[7], screener: s.screen ? r[8] : null, scorer: r[9],
+        echoes: r[10].map(String), early: !!s.early });
+    }
+    return g;
+  }
+
+  /* ---------- App state ---------- */
+  var S = {
+    view: 'home', gameId: null, tab: 'log', sumQ: 'All',
+    f: blankForm(), role: 'creator', editId: null,
+    confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '' },
+    rosterEdit: false, rosterDraft: ''
+  };
+  var confirmTimer = null, toastTimer = null;
+
+  function G() { return games[S.gameId]; }
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg; el.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.hidden = true; }, 2200);
+  }
+  function armConfirm(key) {
+    S.confirm = key;
+    clearTimeout(confirmTimer);
+    confirmTimer = setTimeout(function () { S.confirm = null; render(); }, 3500);
+  }
+
+  /* ---------- Rendering ---------- */
+  var app = document.getElementById('app');
+
+  function statusHTML() {
+    return storageOK
+      ? '<span class="status"><span class="dot" style="background:var(--accent)"></span>Saved on this iPad</span>'
+      : '<span class="status"><span class="dot" style="background:var(--amber)"></span>Not saving: storage is blocked here</span>';
+  }
+
+  function render() {
+    if (S.view === 'game' && G()) renderGame(); else { S.view = 'home'; renderHome(); }
+  }
+
+  function renderHome() {
+    var ng = S.newGame, list = '';
+    for (var i = 0; i < order.length; i++) {
+      var g = games[order[i]];
+      if (!g) continue;
+      var delKey = 'delgame:' + g.id;
+      list += '<div class="gitem"><div style="min-width:0">' +
+        '<div style="font-size:17px;font-weight:600">vs ' + esc(g.opp) + (g.sample ? ' <span class="tag">SAMPLE</span>' : '') + '</div>' +
+        '<div class="muted num" style="font-size:13px">' + esc(niceDate(g.date)) + ' · ' + esc(g.venue) + ' · ' + g.poss.length + ' possessions · ' + gamePts(g) + ' pts conceded</div></div>' +
+        '<div class="gbtns">' +
+        '<button type="button" class="btn primary" data-a="open" data-v="' + g.id + '">Open</button>' +
+        '<button type="button" class="btn" data-a="exportJSON" data-v="' + g.id + '">Backup</button>' +
+        '<button type="button" class="btn ' + (S.confirm === delKey ? 'warn' : 'ghost') + '" data-a="delGame" data-v="' + g.id + '">' + (S.confirm === delKey ? 'Tap again' : 'Delete') + '</button>' +
+        '</div></div>';
+    }
+    if (!list) list = '<div class="empty">No games yet. Start one on the left.</div>';
+
+    app.innerHTML =
+      '<header class="top" style="grid-template-columns:minmax(0,1fr) auto">' +
+        '<div class="row"><div class="crest">89</div><div><div class="lbl" style="letter-spacing:.18em">Surrey 89ers · Defence</div>' +
+        '<div style="font-size:18px;font-weight:600">How they scored</div></div></div>' + statusHTML() +
+      '</header>' +
+      '<div class="home-grid">' +
+        '<section class="card stack" aria-label="New game">' +
+          '<h1 class="h" style="font-size:24px">New game</h1>' +
+          '<div class="field"><label class="lbl" for="ng-opp">Opponent</label><input id="ng-opp" type="text" autocomplete="off" data-ng="opp" value="' + esc(ng.opp) + '" placeholder="Team name"></div>' +
+          '<div class="g2"><div class="field"><label class="lbl" for="ng-date">Date</label><input id="ng-date" type="date" data-ng="date" value="' + esc(ng.date) + '"></div>' +
+          '<div class="field"><span class="lbl">Venue</span><div class="g2">' +
+            '<button type="button" class="btn ' + (ng.venue === 'Home' ? 'on' : '') + '" data-a="ngVenue" data-v="Home">Home</button>' +
+            '<button type="button" class="btn ' + (ng.venue === 'Away' ? 'on' : '') + '" data-a="ngVenue" data-v="Away">Away</button></div></div></div>' +
+          '<div class="field"><label class="lbl" for="ng-roster">Their jersey numbers</label><input id="ng-roster" type="text" inputmode="numeric" autocomplete="off" data-ng="roster" value="' + esc(ng.roster) + '" placeholder="e.g. 0 3 5 7 11 14 21 23 32"></div>' +
+          '<p class="hint" style="margin:0">Separate numbers with spaces. You can edit the roster during the game.</p>' +
+          '<button type="button" class="btn big primary" data-a="startGame">Start logging</button>' +
+        '</section>' +
+        '<section class="card" aria-label="Saved games">' +
+          '<div class="spread" style="margin-bottom:4px"><h2 class="h" style="font-size:24px">Games on this iPad</h2>' +
+          '<label class="btn ghost" style="display:inline-flex;align-items:center" for="import-file">Restore backup</label>' +
+          '<input id="import-file" type="file" accept=".json,application/json" style="position:absolute;left:-9999px"></div>' +
+          list +
+        '</section>' +
+      '</div>';
+  }
+
+  function renderGame() {
+    var g = G();
+    var pts = gamePts(g);
+    var tabsHTML = '<nav class="tabs" aria-label="Screens">' +
+      tabBtn('log', 'Log') + tabBtn('list', 'Possessions (' + g.poss.length + ')') + tabBtn('sum', 'Summary') + '</nav>';
+    var qBtns = '';
+    for (var i = 0; i < QUARTERS.length; i++) {
+      qBtns += '<button type="button" class="' + (g.curQ === QUARTERS[i] ? 'on' : '') + '" data-a="setQ" data-v="' + QUARTERS[i] + '">' + QUARTERS[i] + '</button>';
+    }
+    var mark = g.marks && g.marks[g.curQ];
+    var body = S.tab === 'list' ? listHTML(g) : S.tab === 'sum' ? sumHTML(g) : logHTML(g);
+
+    app.innerHTML =
+      '<header class="top">' +
+        '<div class="row" style="min-width:0"><button type="button" class="btn ghost" data-a="home" aria-label="Back to games">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M15 18l-6-6 6-6"></path></svg> Games</button>' +
+          '<div style="min-width:0"><div class="lbl" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(niceDate(g.date)) + ' · ' + esc(g.venue) + '</div>' +
+          '<div style="font-size:18px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">vs ' + esc(g.opp) + '</div></div></div>' +
+        '<div class="score"><div class="big num">' + pts + '</div><div class="lbl">pts conceded · ' + g.poss.length + ' poss</div></div>' +
+        '<div style="display:flex;justify-content:flex-end">' + tabsHTML + '</div>' +
+      '</header>' +
+      '<div class="qbar"><div class="seg" role="group" aria-label="Quarter">' + qBtns + '</div>' +
+        '<button type="button" class="btn ghost" data-a="markQ" style="min-height:44px">' +
+          (mark ? 'Start of ' + g.curQ + ' marked ' + hms(mark) : 'Mark start of ' + g.curQ) + '</button>' +
+        '<span style="margin-left:auto">' + statusHTML() + '</span></div>' +
+      (g.sample ? '<div class="sample-banner">This is a sample game with example possessions. Try logging, then delete it from Games.</div>' : '') +
+      body;
+  }
+  function tabBtn(id, label) {
+    return '<button type="button" class="tab ' + (S.tab === id ? 'on' : '') + '" data-a="tab" data-v="' + id + '">' + esc(label) + '</button>';
+  }
+
+  function srcPts(g, id) { var t = 0; for (var i = 0; i < g.poss.length; i++) if (g.poss[i].src === id) t += g.poss[i].pts; return t; }
+
+  function logHTML(g) {
+    var f = S.f, sd = srcDef(f.src), i;
+
+    var srcBtns = '';
+    for (i = 0; i < SOURCES.length; i++) {
+      var s = SOURCES[i], on = f.src === s.id, p = srcPts(g, s.id);
+      srcBtns += '<button type="button" class="btn src ' + (on ? 'on' : '') + '" data-a="src" data-v="' + esc(s.id) + '" aria-pressed="' + on + '">' +
+        '<span class="nm"><span class="dot" style="background:' + s.color + '"></span>' + esc(s.id) + '</span>' +
+        '<span class="sub"><span class="num">' + (p ? p + ' pts' : '–') + '</span><span class="early">' + (s.early ? 'EARLY' : '') + '</span></span></button>';
+    }
+
+    var col2;
+    if (!sd) {
+      col2 = '<div class="empty">Pick what started the possession first</div>';
+    } else {
+      var fin = '';
+      for (i = 0; i < sd.finishes.length; i++) fin += opt('fin', sd.finishes[i], sd.finishes[i]);
+      var wh = '';
+      for (i = 0; i < WHERE.length; i++) wh += opt('where', WHERE[i], WHERE[i]);
+      col2 = '<div class="g2">' + fin + '</div>' +
+        '<div class="stack" style="grid-gap:6px;gap:6px"><div class="lbl">Where <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></div><div class="g5">' + wh + '</div></div>';
+      if (sd.cov) {
+        var cv = '';
+        for (i = 0; i < COVS.length; i++) cv += opt('cov', COVS[i], COVS[i]);
+        col2 += '<div class="stack" style="grid-gap:6px;gap:6px"><div class="lbl">Our coverage</div><div class="g3">' + cv + '</div></div>';
+      }
+    }
+
+    var res = '';
+    for (i = 0; i < RESULTS.length; i++) {
+      var r = RESULTS[i];
+      res += '<button type="button" class="btn ' + r.span + ' ' + (f.res === r.id ? 'on' : '') + '" data-a="res" data-v="' + r.id + '">' + r.label + '</button>';
+    }
+    var ftRow = '';
+    if (f.res === 'FTs') {
+      var fb = '';
+      for (i = 0; i <= 3; i++) fb += '<button type="button" class="btn ' + (f.ft === i ? 'on' : '') + '" data-a="ft" data-v="' + i + '">' + i + '</button>';
+      ftRow = '<div class="row"><span class="lbl" style="width:90px">FTs made</span><div class="g6" style="flex-grow:1;grid-template-columns:repeat(4,minmax(0,1fr))">' + fb + '</div></div>';
+    }
+
+    var roles = [['creator', 'Creator']];
+    if (sd && sd.screen) roles.push(['screener', 'Screener']);
+    roles.push(['scorer', 'Shooter']);
+    if (!sd || !sd.screen) { if (S.role === 'screener') S.role = 'scorer'; }
+    var roleBtns = '';
+    for (i = 0; i < roles.length; i++) {
+      var rk = roles[i][0], val = f[rk];
+      roleBtns += '<button type="button" class="btn role ' + (S.role === rk ? 'on' : '') + '" data-a="role" data-v="' + rk + '" aria-pressed="' + (S.role === rk) + '">' +
+        '<span class="who">' + (val ? '#' + esc(val) : '–') + '</span><span class="rl">' + roles[i][1] + '</span></button>';
+    }
+    var jBtns = '';
+    var roster = g.roster.concat(['?']);
+    for (i = 0; i < roster.length; i++) {
+      var n = roster[i], isSel = f[S.role] === n;
+      jBtns += '<button type="button" class="btn jersey ' + (isSel ? 'on' : '') + '" data-a="num" data-v="' + esc(n) + '" aria-label="' + (n === '?' ? 'Unknown player' : 'Number ' + esc(n)) + '">' + (n === '?' ? '?' : esc(n)) + '</button>';
+    }
+    var rosterBlock = S.rosterEdit
+      ? '<div class="field"><label class="lbl" for="roster-edit">Their jersey numbers</label><input id="roster-edit" type="text" inputmode="numeric" data-roster="1" value="' + esc(S.rosterDraft) + '"></div>' +
+        '<div class="g2"><button type="button" class="btn" data-a="rosterCancel">Cancel</button><button type="button" class="btn primary" data-a="rosterSave">Save roster</button></div>'
+      : '<div class="g6">' + jBtns + '</div>';
+
+    var ech = '', names = [];
+    for (i = 0; i < ECHOES.length; i++) {
+      var id = String(i + 1), eon = f.echoes.indexOf(id) >= 0;
+      if (eon) names.push(id + ' · ' + ECHOES[i]);
+      ech += '<button type="button" class="btn echo jersey ' + (eon ? 'on' : '') + '" data-a="echo" data-v="' + id + '" aria-pressed="' + eon + '" aria-label="Echo ' + id + ': ' + esc(ECHOES[i]) + '">' + id + '</button>';
+    }
+
+    var canLog = !!(f.src && f.res && (f.res !== 'FTs' || f.ft !== null));
+    var recent = '', ordered = g.poss.slice().sort(function (a, b) { return b.t - a.t; });
+    for (i = 0; i < 3; i++) {
+      var x = ordered[i];
+      if (!x) { recent += '<div class="rc" style="opacity:.4"><div class="t">–</div><div class="d">&nbsp;</div></div>'; continue; }
+      recent += '<div class="rc"><div class="t"><span class="dot" style="background:' + (srcDef(x.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(x.src + (x.fin ? ' › ' + x.fin : '') + (x.cov ? ' · ' + x.cov : '')) + '</div>' +
+        '<div class="d num">' + esc(x.q + ' ' + hms(x.t) + ' · ' + whoText(x) + resText(x) + (x.echoes.length ? ' · Echo ' + x.echoes.join(', ') : '')) + '</div></div>';
+    }
+
+    return (S.editId ? '<div class="edit-banner">Editing possession #' + esc(editN(g)) + '. Change anything, then Save changes.</div>' : '') +
+      '<div class="log-grid">' +
+        '<section class="card stack" aria-label="What started it">' +
+          '<div class="spread"><h2 class="h" style="font-size:21px">1 · Source</h2><span class="muted" style="font-size:13px">pts tonight</span></div>' +
+          '<div class="g2">' + srcBtns + '</div>' +
+          '<p class="hint" style="margin:0">Log what created the advantage, not the final shot. EARLY = before our half-court D was set.</p>' +
+        '</section>' +
+        '<section class="card stack" aria-label="How it ended">' +
+          '<div class="spread"><h2 class="h" style="font-size:21px">2 · Finish</h2><span class="muted" style="font-size:13px">' + esc(f.src || '') + '</span></div>' +
+          col2 +
+        '</section>' +
+        '<section class="card stack" aria-label="Result and players">' +
+          '<h2 class="h" style="font-size:21px">3 · Result &amp; who</h2>' +
+          '<div class="g12">' + res + '</div>' + ftRow +
+          '<div class="spread"><span class="lbl">Tap role, then number</span>' +
+            (S.rosterEdit ? '' : '<button type="button" class="btn ghost" data-a="rosterEdit" style="min-height:36px;font-size:13px">Edit roster</button>') + '</div>' +
+          '<div class="roles">' + roleBtns + '</div>' + rosterBlock +
+          '<div class="stack" style="grid-gap:6px;gap:6px"><div class="spread"><span class="lbl">Echo broken?</span><span class="muted" style="font-size:12px">optional</span></div>' +
+            '<div class="g6">' + ech + '</div><div class="echo-txt">' + esc(names.length ? names.join('   ') : 'Tap any echo that broke on this possession') + '</div></div>' +
+          '<div class="g2" style="grid-template-columns:minmax(0,1fr) minmax(0,2.2fr)">' +
+            '<button type="button" class="btn big" data-a="clear">' + (S.editId ? 'Cancel' : 'Clear') + '</button>' +
+            '<button type="button" class="btn big primary" data-a="log"' + (canLog ? '' : ' disabled') + '>' + (S.editId ? 'Save changes' : 'Log possession') + '</button></div>' +
+        '</section>' +
+      '</div>' +
+      '<section class="recent" aria-label="Last logged">' + recent +
+        '<button type="button" class="btn" data-a="undo"' + (g.poss.length ? '' : ' disabled') + ' style="border-radius:14px">Undo last</button></section>';
+  }
+  function editN(g) { for (var i = 0; i < g.poss.length; i++) if (g.poss[i].id === S.editId) return g.poss[i].n; return ''; }
+  function opt(key, val, label) {
+    var on = S.f[key] === val;
+    return '<button type="button" class="btn ' + (on ? 'on' : '') + '" data-a="opt" data-k="' + key + '" data-v="' + esc(val) + '" aria-pressed="' + on + '">' + esc(label) + '</button>';
+  }
+  function whoText(p) {
+    var parts = [];
+    if (p.creator) parts.push('#' + p.creator);
+    if (p.screener) parts.push('scr #' + p.screener);
+    if (p.scorer && p.scorer !== p.creator) parts.push((p.creator ? '→ ' : '') + '#' + p.scorer);
+    return parts.length ? parts.join(' ') + ' · ' : '';
+  }
+
+  function listHTML(g) {
+    var rows = '', ps = g.poss.slice().sort(function (a, b) { return b.t - a.t; });
+    for (var i = 0; i < ps.length; i++) {
+      var p = ps[i], dk = 'del:' + p.id;
+      rows += '<tr><td class="num">' + p.n + '</td><td>' + p.q + '</td><td class="num muted">' + hms(p.t) + '</td>' +
+        '<td><span class="dot" style="background:' + (srcDef(p.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(p.src) + (p.fin ? ' › ' + esc(p.fin) : '') + (p.early ? ' <span class="tag">EARLY</span>' : '') + '</td>' +
+        '<td class="muted">' + esc([p.where, p.cov].filter(Boolean).join(' · ')) + '</td>' +
+        '<td class="num">' + esc(whoText(p).replace(/ · $/, '')) + '</td>' +
+        '<td>' + esc(resText(p)) + '</td><td class="num">' + esc(p.echoes.join(', ')) + '</td>' +
+        '<td class="r" style="white-space:nowrap"><button type="button" class="btn" data-a="edit" data-v="' + p.id + '" style="min-height:40px">Edit</button> ' +
+        '<button type="button" class="btn ' + (S.confirm === dk ? 'warn' : 'ghost') + '" data-a="del" data-v="' + p.id + '" style="min-height:40px">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button></td></tr>';
+    }
+    if (!rows) rows = '<tr><td colspan="9"><div class="empty">Nothing logged yet.</div></td></tr>';
+    return '<section class="card stack" aria-label="All possessions">' +
+      '<div class="spread" style="flex-wrap:wrap"><h2 class="h" style="font-size:21px">All possessions</h2>' +
+        '<div class="gbtns"><button type="button" class="btn" data-a="exportCSV">Export CSV</button><button type="button" class="btn" data-a="exportJSON" data-v="' + g.id + '">Backup file</button><button type="button" class="btn" data-a="copyCSV">Copy CSV</button></div></div>' +
+      '<div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Q</th><th>Logged</th><th>Source › finish</th><th>Where · cov</th><th>Players</th><th>Result</th><th>Echo</th><th class="r"></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '</section>';
+  }
+
+  function sumHTML(g) {
+    var ps = [], i, k;
+    for (i = 0; i < g.poss.length; i++) if (S.sumQ === 'All' || g.poss[i].q === S.sumQ) ps.push(g.poss[i]);
+    var qb = '', qs = ['All'].concat(QUARTERS);
+    for (i = 0; i < qs.length; i++) qb += '<button type="button" class="' + (S.sumQ === qs[i] ? 'on' : '') + '" data-a="sumQ" data-v="' + qs[i] + '">' + qs[i] + '</button>';
+
+    var tot = 0, early = 0, tos = 0, bySrc = {}, cov = {}, ech = {}, pl = {};
+    for (i = 0; i < ps.length; i++) {
+      var p = ps[i];
+      tot += p.pts; if (p.early) early += p.pts; if (p.res === 'TO') tos++;
+      (bySrc[p.src] = bySrc[p.src] || { pts: 0, poss: 0 }); bySrc[p.src].pts += p.pts; bySrc[p.src].poss++;
+      if (p.cov) { var ck = p.src + ' · ' + p.cov; (cov[ck] = cov[ck] || { pts: 0, poss: 0 }); cov[ck].pts += p.pts; cov[ck].poss++; }
+      for (k = 0; k < p.echoes.length; k++) { var e = p.echoes[k]; (ech[e] = ech[e] || { n: 0, pts: 0 }); ech[e].n++; ech[e].pts += p.pts; }
+      var inv = [];
+      if (p.creator && p.creator !== '?') inv.push(p.creator);
+      if (p.scorer && p.scorer !== '?' && inv.indexOf(p.scorer) < 0) inv.push(p.scorer);
+      for (k = 0; k < inv.length; k++) {
+        var who = inv[k]; (pl[who] = pl[who] || { involved: 0, created: 0, scored: 0 });
+        pl[who].involved += p.pts;
+      }
+      if (p.creator && p.creator !== '?') { (pl[p.creator] = pl[p.creator] || { involved: 0, created: 0, scored: 0 }); pl[p.creator].created += p.pts; }
+      if (p.scorer && p.scorer !== '?') { (pl[p.scorer] = pl[p.scorer] || { involved: 0, created: 0, scored: 0 }); pl[p.scorer].scored += p.pts; }
+    }
+    var n = ps.length;
+    function ppp(a, b) { return b ? (a / b).toFixed(2) : '–'; }
+
+    var srcRows = '', keys = Object.keys(bySrc).sort(function (a, b) { return bySrc[b].pts - bySrc[a].pts || bySrc[b].poss - bySrc[a].poss; });
+    var maxPts = 1; for (i = 0; i < keys.length; i++) maxPts = Math.max(maxPts, bySrc[keys[i]].pts);
+    for (i = 0; i < keys.length; i++) {
+      var b = bySrc[keys[i]], col = (srcDef(keys[i]) || { color: OTHER }).color;
+      srcRows += '<tr><td style="white-space:nowrap;font-weight:600"><span class="dot" style="background:' + col + ';margin-right:8px"></span>' + esc(keys[i]) + '</td>' +
+        '<td style="width:40%"><div class="bar"><span style="width:' + Math.round(b.pts / maxPts * 100) + '%;background:' + col + '"></span></div></td>' +
+        '<td class="r num" style="font-weight:600">' + b.pts + '</td><td class="r num muted">' + b.poss + '</td><td class="r num" style="font-weight:600">' + ppp(b.pts, b.poss) + '</td></tr>';
+    }
+    if (!srcRows) srcRows = '<tr><td colspan="5" class="muted">Nothing logged for this period.</td></tr>';
+
+    var covRows = '', ckeys = Object.keys(cov).sort(function (a, b) { return cov[b].poss - cov[a].poss; });
+    for (i = 0; i < ckeys.length; i++) covRows += '<tr><td>' + esc(ckeys[i]) + '</td><td class="r num">' + cov[ckeys[i]].pts + '</td><td class="r num muted">' + cov[ckeys[i]].poss + '</td><td class="r num" style="font-weight:600">' + ppp(cov[ckeys[i]].pts, cov[ckeys[i]].poss) + '</td></tr>';
+    if (!covRows) covRows = '<tr><td colspan="4" class="muted">No coverages logged yet.</td></tr>';
+
+    var echRows = '';
+    for (i = 0; i < ECHOES.length; i++) {
+      var id = String(i + 1), ev = ech[id] || { n: 0, pts: 0 };
+      echRows += '<tr><td class="num" style="font-weight:700">' + id + '</td><td>' + esc(ECHOES[i]) + '</td><td class="r num" style="font-weight:600">' + ev.n + '</td><td class="r num muted">' + ev.pts + '</td></tr>';
+    }
+
+    var plRows = '', pkeys = Object.keys(pl).sort(function (a, b) { return pl[b].involved - pl[a].involved; });
+    for (i = 0; i < pkeys.length && i < 8; i++) {
+      var pp = pl[pkeys[i]];
+      plRows += '<tr><td style="font-family:var(--display);font-weight:700;font-size:18px">#' + esc(pkeys[i]) + '</td><td class="r num" style="font-weight:600">' + pp.involved + '</td><td class="r num muted">' + pp.created + '</td><td class="r num muted">' + pp.scored + '</td></tr>';
+    }
+    if (!plRows) plRows = '<tr><td colspan="4" class="muted">No players logged yet.</td></tr>';
+
+    return '<div class="qbar" style="padding-top:0"><span class="lbl" style="margin-right:10px">Period</span><div class="seg" role="group" aria-label="Summary period">' + qb + '</div></div>' +
+      '<div class="kpis">' +
+        kpi(tot, 'points conceded', n + ' possessions logged') +
+        kpi(ppp(tot, n), 'points per possession', 'all sources') +
+        kpi(tot ? Math.round(early / tot * 100) + '%' : '–', 'before our D was set', early + ' of ' + tot + ' pts (transition + off. rebounds)') +
+        kpi(tos, 'turnovers forced', 'logged as Turnover') +
+      '</div>' +
+      '<div class="sum-grid">' +
+        '<div class="stack" style="grid-gap:12px;gap:12px">' +
+          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">How they\'re scoring</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Source</th><th>Points</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + srcRows + '</tbody></table></div></section>' +
+          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Screen coverages</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Action · coverage</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + covRows + '</tbody></table></div></section>' +
+        '</div>' +
+        '<div class="stack" style="grid-gap:12px;gap:12px">' +
+          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Echoes broken</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Echo</th><th class="r">Times</th><th class="r">Pts</th></tr></thead><tbody>' + echRows + '</tbody></table></div></section>' +
+          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Who\'s hurting us</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Player</th><th class="r">Involved</th><th class="r">Created</th><th class="r">Scored</th></tr></thead><tbody>' + plRows + '</tbody></table></div>' +
+          '<p class="hint" style="margin:8px 0 0">Involved counts points a player created or scored, once per possession.</p></section>' +
+        '</div>' +
+      '</div>';
+  }
+  function kpi(v, label, sub) {
+    return '<div class="card kpi"><div class="v num">' + v + '</div><div style="font-weight:600;margin-top:4px">' + label + '</div><div class="muted" style="font-size:13px">' + esc(sub) + '</div></div>';
+  }
+
+  /* ---------- Export / import ---------- */
+  function csvFor(g) {
+    var head = ['opponent', 'date', 'venue', 'n', 'quarter', 'logged_at', 'secs_since_q_start', 'source', 'finish', 'where', 'coverage', 'result', 'ft_made', 'points', 'creator', 'screener', 'shooter', 'echoes', 'early'];
+    var lines = [head.join(',')];
+    var ps = g.poss.slice().sort(function (a, b) { return a.t - b.t; });
+    for (var i = 0; i < ps.length; i++) {
+      var p = ps[i], m = g.marks && g.marks[p.q];
+      var row = [g.opp, g.date, g.venue, p.n, p.q, new Date(p.t).toISOString(), m ? Math.round((p.t - m) / 1000) : '',
+        p.src, p.fin || '', p.where || '', p.cov || '', p.res, p.ft == null ? '' : p.ft, p.pts, p.creator || '', p.screener || '', p.scorer || '', p.echoes.join(' '), p.early ? 'yes' : 'no'];
+      lines.push(row.map(function (c) { c = String(c); return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','));
+    }
+    return lines.join('\n');
+  }
+  function fileName(g, ext) { return (g.date + ' vs ' + g.opp).replace(/[^A-Za-z0-9 _-]/g, '').replace(/\s+/g, '_') + '.' + ext; }
+  function saveFile(name, mime, text) {
+    var blob = new Blob([text], { type: mime });
+    try {
+      if (window.File && navigator.canShare) {
+        var file = new File([blob], name, { type: mime });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: name }).then(function () { toast('Shared ' + name); }, function () {});
+          return;
+        }
+      }
+    } catch (e) {}
+    var framed = true;
+    try { framed = window.self !== window.top; } catch (e3) {}
+    if (framed) { toast('Saving files works in the installed app. Use Copy CSV here.'); return; }
+    try {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.parentNode.removeChild(a); }, 1000);
+      toast('Saved ' + name);
+    } catch (e2) { toast('This preview can\'t save files. Use Copy CSV instead.'); }
+  }
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { toast('CSV copied'); }, function () { toast('Copy was blocked here'); });
+    } else { toast('Copy isn\'t available here'); }
+  }
+  function importFile(file) {
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var data = JSON.parse(r.result);
+        var list = data && data.games ? data.games : [data];
+        var n = 0;
+        for (var i = 0; i < list.length; i++) {
+          var g = list[i];
+          if (!g || !g.id || !g.poss) continue;
+          saveGame(g); n++;
+        }
+        toast(n ? 'Restored ' + n + (n === 1 ? ' game' : ' games') : 'That file has no games in it');
+      } catch (e) { toast('That file isn\'t a backup from this app'); }
+      render();
+    };
+    r.readAsText(file);
+  }
+
+  /* ---------- Actions ---------- */
+  function act(a, v, el) {
+    var g = G(), f = S.f;
+    switch (a) {
+      case 'open': S.gameId = v; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
+      case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); break;
+      case 'ngVenue': S.newGame.venue = v; break;
+      case 'startGame':
+        var opp = S.newGame.opp.replace(/^\s+|\s+$/g, '');
+        if (!opp) { toast('Add the opponent\'s name first'); var o = document.getElementById('ng-opp'); if (o) o.focus(); return; }
+        var ng = { id: uid(), opp: opp, date: S.newGame.date || todayISO(), venue: S.newGame.venue, roster: parseRoster(S.newGame.roster),
+          curQ: 'Q1', marks: {}, poss: [], created: Date.now() };
+        saveGame(ng);
+        S.newGame = { opp: '', date: todayISO(), venue: 'Home', roster: '' };
+        S.gameId = ng.id; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.role = 'creator';
+        wake();
+        break;
+      case 'delGame':
+        if (S.confirm === 'delgame:' + v) { deleteGame(v); S.confirm = null; toast('Game deleted'); }
+        else { armConfirm('delgame:' + v); }
+        break;
+      case 'tab': S.tab = v; S.confirm = null; break;
+      case 'setQ': g.curQ = v; saveGame(g); break;
+      case 'markQ': g.marks = g.marks || {}; g.marks[g.curQ] = Date.now(); saveGame(g); toast('Start of ' + g.curQ + ' marked'); break;
+      case 'src':
+        if (f.src !== v) { f.src = v; f.fin = null; f.cov = null; f.where = null; if (!srcDef(v).screen) f.screener = null; }
+        break;
+      case 'opt': var key = el.getAttribute('data-k'); f[key] = f[key] === v ? null : v; break;
+      case 'res': f.res = f.res === v ? null : v; if (f.res !== 'FTs') f.ft = null; break;
+      case 'ft': f.ft = Number(v); break;
+      case 'role': S.role = v; break;
+      case 'num':
+        f[S.role] = f[S.role] === v ? null : v;
+        if (f[S.role]) {
+          var sd = srcDef(f.src);
+          if (S.role === 'creator') S.role = (sd && sd.screen) ? 'screener' : 'scorer';
+          else if (S.role === 'screener') S.role = 'scorer';
+        }
+        break;
+      case 'echo': var ix = f.echoes.indexOf(v); if (ix >= 0) f.echoes.splice(ix, 1); else f.echoes.push(v); break;
+      case 'clear': S.f = blankForm(); S.role = 'creator'; S.editId = null; break;
+      case 'log': logPossession(g); break;
+      case 'undo':
+        if (!g.poss.length) return;
+        var last = 0;
+        for (var i = 1; i < g.poss.length; i++) if (g.poss[i].t > g.poss[last].t) last = i;
+        var gone = g.poss.splice(last, 1)[0];
+        saveGame(g); toast('Removed #' + gone.n + ' ' + gone.src);
+        break;
+      case 'del':
+        if (S.confirm === 'del:' + v) {
+          for (var j = 0; j < g.poss.length; j++) if (g.poss[j].id === v) { g.poss.splice(j, 1); break; }
+          saveGame(g); S.confirm = null; toast('Possession deleted');
+        } else armConfirm('del:' + v);
+        break;
+      case 'edit':
+        for (var m = 0; m < g.poss.length; m++) if (g.poss[m].id === v) {
+          var p = g.poss[m];
+          S.f = { src: p.src, fin: p.fin, where: p.where, cov: p.cov, res: p.res, ft: p.ft, creator: p.creator, screener: p.screener, scorer: p.scorer, echoes: p.echoes.slice() };
+          S.editId = p.id; S.tab = 'log'; S.role = 'creator';
+        }
+        break;
+      case 'rosterEdit': S.rosterEdit = true; S.rosterDraft = g.roster.join(' '); break;
+      case 'rosterCancel': S.rosterEdit = false; break;
+      case 'rosterSave': g.roster = parseRoster(S.rosterDraft); saveGame(g); S.rosterEdit = false; toast('Roster saved'); break;
+      case 'sumQ': S.sumQ = v; break;
+      case 'exportCSV': saveFile(fileName(g, 'csv'), 'text/csv', csvFor(g)); return;
+      case 'copyCSV': copyText(csvFor(g)); return;
+      case 'exportJSON': var eg = games[v]; if (eg) saveFile(fileName(eg, 'json'), 'application/json', JSON.stringify({ app: '89ers-courtside', version: 1, games: [eg] }, null, 1)); return;
+      default: return;
+    }
+    render();
+  }
+
+  function logPossession(g) {
+    var f = S.f, sd = srcDef(f.src);
+    if (!(f.src && f.res && (f.res !== 'FTs' || f.ft !== null))) return;
+    var rec = { src: f.src, fin: f.fin, where: f.where, cov: sd.cov ? f.cov : null, res: f.res, ft: f.res === 'FTs' ? f.ft : null,
+      pts: ptsFor(f.res, f.ft), creator: f.creator, screener: sd.screen ? f.screener : null, scorer: f.scorer,
+      echoes: f.echoes.slice().sort(), early: !!sd.early };
+    if (S.editId) {
+      for (var i = 0; i < g.poss.length; i++) if (g.poss[i].id === S.editId) {
+        var old = g.poss[i];
+        rec.id = old.id; rec.n = old.n; rec.q = old.q; rec.t = old.t;
+        g.poss[i] = rec;
+      }
+      S.editId = null; S.tab = 'list';
+      toast('Possession #' + rec.n + ' updated');
+    } else {
+      var maxN = 0;
+      for (var j = 0; j < g.poss.length; j++) maxN = Math.max(maxN, g.poss[j].n);
+      rec.id = uid(); rec.n = maxN + 1; rec.q = g.curQ; rec.t = Date.now();
+      g.poss.push(rec);
+      toast('Logged #' + rec.n + ': ' + rec.src + (rec.fin ? ' › ' + rec.fin : '') + ' · ' + resText(rec));
+    }
+    saveGame(g);
+    S.f = blankForm(); S.role = 'creator';
+  }
+
+  var wakeLock = null;
+  function wake() {
+    try {
+      if (navigator.wakeLock && !wakeLock) navigator.wakeLock.request('screen').then(function (l) { wakeLock = l; l.addEventListener('release', function () { wakeLock = null; }); }, function () {});
+    } catch (e) {}
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && S.view === 'game') wake(); });
+
+  /* ---------- Events ---------- */
+  app.addEventListener('click', function (e) {
+    var el = e.target;
+    while (el && el !== app && !(el.getAttribute && el.getAttribute('data-a'))) el = el.parentNode;
+    if (!el || el === app || el.disabled) return;
+    act(el.getAttribute('data-a'), el.getAttribute('data-v'), el);
+  });
+  app.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.getAttribute('data-ng')) S.newGame[t.getAttribute('data-ng')] = t.value;
+    if (t.getAttribute('data-roster')) S.rosterDraft = t.value;
+  });
+  app.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.id === 'import-file' && t.files && t.files[0]) importFile(t.files[0]);
+  });
+
+  /* ---------- Start ---------- */
+  loadAll();
+  if (!order.length && !sget('sampleDismissed')) { saveGame(makeSample()); }
+  render();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+</script>
+</body>
+</html>
