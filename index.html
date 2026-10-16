@@ -126,8 +126,63 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .hint{font-size:13px;color:var(--muted);line-height:1.45}
 .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:6px;background:var(--accent-soft);color:#9BE3BC;border:1px solid var(--accent-line);vertical-align:middle}
 
+/* live (LiveStats feed, targets, four factors, their calls) */
+.lv-top{display:flex;align-items:center;flex-wrap:wrap;padding:8px 12px;margin-bottom:10px}
+.lv-top>*{margin:4px 14px 4px 0}
+.lv-pill{display:inline-flex;align-items:center;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:999px;background:var(--raised);color:var(--muted);white-space:nowrap}
+.lv-pill .dot{width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:7px}
+.lv-pill.live{background:var(--accent-soft);color:var(--accent)}
+.lv-pill.live .dot{animation:lvpulse 1.6s ease-in-out infinite}
+.lv-pill.warn,.lv-badge.warn{background:#2A2413;color:#F2C46A}
+.lv-pill.bad,.lv-badge.bad{background:#3A1E14;color:#FFB4A0}
+@keyframes lvpulse{50%{opacity:.3}}
+.lv-board{font-size:15px;white-space:nowrap}
+.lv-board b{font-family:var(--display);font-size:28px;font-weight:700}
+.lv-board b.us,.lv-us{color:var(--accent)}
+.lv-clk{margin-left:12px;padding-left:12px;border-left:1px solid var(--line);font-weight:700;font-size:20px}
+.lv-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(300px,1fr);grid-gap:12px;gap:12px;align-items:start}
+.lv-col{display:grid;grid-gap:10px;gap:10px;align-content:start;min-width:0}
+.lv-sec{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin:4px 2px -2px}
+.lv-g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:10px;gap:10px}
+.lv-g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:10px;gap:10px}
+.lv-tgt,.lv-met{display:grid;grid-gap:7px;gap:7px;align-content:start;min-width:0}
+.lv-side{display:grid;grid-gap:5px;gap:5px}
+.lv-who{font-family:var(--display);font-weight:700;font-size:16px;letter-spacing:.04em}
+.lv-side.us .lv-who{color:var(--accent)}
+.lv-big{font-family:var(--display);font-weight:700;font-size:38px;line-height:1}
+.lv-side.them .lv-big{font-size:28px}
+.lv-track{position:relative;height:8px;border-radius:4px;background:var(--raised)}
+.lv-track span{position:absolute;top:0;bottom:0;left:0;border-radius:4px}
+.lv-side.us .lv-track .act,.lv-side.us .lv-track .proj{background:var(--accent)}
+.lv-side.them .lv-track .act,.lv-side.them .lv-track .proj{background:var(--muted)}
+.lv-track .proj{opacity:.3}
+.lv-track .tick{width:2px;margin-left:-1px;top:-4px;bottom:-4px;background:var(--ink);border-radius:1px}
+.lv-hr{height:1px;background:var(--line-soft)}
+.lv-badge{font-size:12px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:7px;background:var(--raised);color:var(--muted);white-space:nowrap}
+.lv-badge.good{background:var(--accent-soft);color:#9BE3BC}
+.lv-val{font-family:var(--display);font-weight:700;font-size:32px;line-height:1.05}
+.lv-mbar{height:6px;border-radius:3px;background:var(--raised);overflow:hidden}
+.lv-mbar i{display:block;height:100%;border-radius:3px;background:var(--faint)}
+.lv-mbar i.good{background:var(--accent)}
+.lv-mbar i.bad{background:#E2603F}
+.tbl th.lv-now,.tbl td.lv-now{background:var(--raised)}
+.btn.lv-callbtn{width:100%;min-height:68px;background:var(--ink);border-color:var(--ink);color:var(--ground);font-family:var(--display);font-size:28px;letter-spacing:.1em;display:flex;align-items:center;justify-content:center}
+.btn.lv-callbtn span+span{margin-left:16px;font-family:var(--body);font-size:16px;letter-spacing:0;opacity:.75}
+.lv-comp{background:var(--raised);border:1px solid var(--line);border-radius:14px;padding:12px}
+.lv-stampbig{font-family:var(--display);font-weight:700;font-size:28px;min-width:112px}
+.lv-comp .row{flex-wrap:wrap}
+.lv-comp .row .btn{min-width:46px;padding:0 8px;margin-bottom:6px}
+.lv-chips{display:flex;flex-wrap:wrap;margin:-3px}
+.lv-chips .btn{margin:3px;min-height:40px;font-size:14px;border-radius:999px;padding:0 13px}
+.lv-in{min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--ground);padding:0 12px;font-size:16px;width:100%}
+.lv-in.small{width:72px;text-align:center;margin-right:10px}
+.lv-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;grid-gap:10px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft)}
+.lv-row:last-child{border-bottom:0}
+.lv-link{border:0;background:none;padding:0;color:var(--accent);font-weight:600;text-decoration:underline;font-size:13px}
+
 @media (max-width: 900px){
-  .log-grid,.sum-grid,.home-grid{grid-template-columns:minmax(0,1fr)}
+  .log-grid,.sum-grid,.home-grid,.lv-grid,.lv-g3{grid-template-columns:minmax(0,1fr)}
+  .lv-g4{grid-template-columns:repeat(2,minmax(0,1fr))}
   .recent{grid-template-columns:minmax(0,1fr) 96px}
   .recent .rc:nth-child(n+2){display:none}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -138,7 +193,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   .tab{padding:0 10px;font-size:14px}
   .kpi .v{font-size:34px}
 }
-@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}.lv-pill.live .dot{animation:none}}
 </style>
 
 <div id="app" aria-live="polite"></div>
@@ -307,7 +362,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   var S = {
     view: 'home', gameId: null, tab: 'log', sumQ: 'All',
     f: blankForm(), role: 'creator', editId: null,
-    confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '' },
+    confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' },
+    lvLink: '', lvTEdit: false,
     rosterEdit: false, rosterDraft: ''
   };
   var confirmTimer = null, toastTimer = null;
@@ -335,7 +391,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
 
   function render() {
-    if (S.view === 'game' && G()) renderGame(); else { S.view = 'home'; renderHome(); }
+    if (!(S.view === 'game' && G())) S.view = 'home';
+    lvSync();
+    if (S.view === 'game') renderGame(); else renderHome();
   }
 
   function renderHome() {
@@ -370,6 +428,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
             '<button type="button" class="btn ' + (ng.venue === 'Away' ? 'on' : '') + '" data-a="ngVenue" data-v="Away">Away</button></div></div></div>' +
           '<div class="field"><label class="lbl" for="ng-roster">Their jersey numbers</label><input id="ng-roster" type="text" inputmode="numeric" autocomplete="off" data-ng="roster" value="' + esc(ng.roster) + '" placeholder="e.g. 0 3 5 7 11 14 21 23 32"></div>' +
           '<p class="hint" style="margin:0">Separate numbers with spaces. You can edit the roster during the game.</p>' +
+          '<div class="field"><label class="lbl" for="ng-ls">LiveStats link <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional, for the Live tab)</span></label><input id="ng-ls" type="text" inputmode="url" autocomplete="off" data-ng="ls" value="' + esc(ng.ls) + '" placeholder="Paste the game\'s LiveStats link"></div>' +
           '<button type="button" class="btn big primary" data-a="startGame">Start logging</button>' +
         '</section>' +
         '<section class="card" aria-label="Saved games">' +
@@ -385,13 +444,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var g = G();
     var pts = gamePts(g);
     var tabsHTML = '<nav class="tabs" aria-label="Screens">' +
-      tabBtn('log', 'Log') + tabBtn('list', 'Possessions (' + g.poss.length + ')') + tabBtn('sum', 'Summary') + '</nav>';
+      tabBtn('log', 'Log') + tabBtn('list', 'Possessions (' + g.poss.length + ')') + tabBtn('sum', 'Summary') + tabBtn('live', 'Live') + '</nav>';
     var qBtns = '';
     for (var i = 0; i < QUARTERS.length; i++) {
       qBtns += '<button type="button" class="' + (g.curQ === QUARTERS[i] ? 'on' : '') + '" data-a="setQ" data-v="' + QUARTERS[i] + '">' + QUARTERS[i] + '</button>';
     }
     var mark = g.marks && g.marks[g.curQ];
-    var body = S.tab === 'list' ? listHTML(g) : S.tab === 'sum' ? sumHTML(g) : logHTML(g);
+    var body = S.tab === 'list' ? listHTML(g) : S.tab === 'sum' ? sumHTML(g) : S.tab === 'live' ? liveHTML(g) : logHTML(g);
 
     app.innerHTML =
       '<header class="top">' +
@@ -688,9 +747,462 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     r.readAsText(file);
   }
 
+  /* ---------- Live: LiveStats feed, game targets, four factors, their play calls ----------
+     Needs internet (the iPad's data). Everything else in the app still works offline.
+     The feed comes through this site's api/game relay, because LiveStats blocks other websites. */
+  var LV_TAGS = ['ATO', 'SLOB', 'BLOB', 'Early', 'Half-court', 'End of quarter'];
+  var LV_POLL = 5000, LV_POLL_SLOW = 30000;
+  var LV = { gameId: null, lsId: null, d: null, ok: false, at: 0, err: '', fails: 0, timer: null, draft: null };
+
+  function lvTargets() { var t = sget('targets') || {}; return { hustle: t.hustle || 20, paint: t.paint || 40, three: t.three || 10 }; }
+  function lvParseId(s) {
+    s = String(s || '');
+    var m = s.match(/\/(\d{5,9})(?:\/|$|\?)/) || s.match(/^\s*(\d{5,9})\s*$/) || s.match(/(\d{6,9})/);
+    return m ? m[1] : null;
+  }
+  function lvSecs(gt) { var p = String(gt || '0:0').split(':'); return (Number(p[0]) || 0) * 60 + (Number(p[1]) || 0); }
+  function lvClock(s) { s = Math.max(0, Math.round(s)); return pad(Math.floor(s / 60)) + ':' + pad(s % 60); }
+  function lvPerLabel(p) { return p <= 4 ? 'Q' + p : 'OT' + (p - 4); }
+  function lvL(d) { return ((d && d.periodLen) || 10) * 60; }
+  function lvPerLen(d, p) { return p <= 4 ? lvL(d) : 300; }
+  function lvElapsed(d, per, rem) { var L = lvL(d); return per <= 4 ? (per - 1) * L + (L - rem) : 4 * L + (per - 5) * 300 + (300 - rem); }
+  function lvDecode(d, str) {
+    var out = [];
+    if (!str) return out;
+    var rows = str.split(';');
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i].split(','), per = Number(r[0]);
+      if (r[1]) per = per > 4 ? per : 4 + per;
+      var rem = lvSecs(r[2]);
+      out.push({ per: per, rem: rem, el: lvElapsed(d, per, rem), tno: Number(r[3]), c: r[4], ok: r[5] === '1', q: r[6] || '' });
+    }
+    return out;
+  }
+  function lvApply(j) {
+    var d = { periodLen: Number(j.periodLength) || 10, t1: j.t1, t2: j.t2, ended: !!j.ended };
+    d.events = lvDecode(d, j.ev);
+    var per = Number(j.period) || 1;
+    if (Number(j.inOT)) per = per > 4 ? per : 4 + per;
+    d.per = per; d.rem = lvSecs(j.clock);
+    var last = d.events[d.events.length - 1];
+    if (last && lvElapsed(d, d.per, d.rem) < last.el) { d.per = last.per; d.rem = last.rem; }
+    d.score1 = j.t1.score; d.score2 = j.t2.score;
+    LV.d = d;
+  }
+  function lvWe(g) {
+    if (g.lsWe) return g.lsWe;
+    var d = LV.d;
+    if (d && /surrey/i.test(d.t1.name) && !/surrey/i.test(d.t2.name)) return '1';
+    return '2';
+  }
+  function lvTeam(d, n) { return n === '1' ? d.t1 : d.t2; }
+  function lvOppKey(g) {
+    var d = LV.d;
+    if (d) return lvTeam(d, lvWe(g) === '1' ? '2' : '1').code;
+    return String(g.opp || 'OPP').toUpperCase();
+  }
+  function lvBook(g) { var b = sget('books') || {}; return b[lvOppKey(g)] || []; }
+  function lvAddToBook(g, call) {
+    var b = sget('books') || {}, k = lvOppKey(g), list = b[k] || [];
+    for (var i = 0; i < list.length; i++) if (list[i].toLowerCase() === call.toLowerCase()) return;
+    list.push(call); b[k] = list; sset('books', b);
+  }
+
+  /* stats rebuilt from the play-by-play (matches the official box score) */
+  function lvBlank() { return { pts: 0, fb: 0, sc: 0, pitp: 0, tpm: 0, tpa: 0, fgm: 0, fga: 0, fta: 0, pot: 0, oreb: 0, dreb: 0, to: 0, q: {} }; }
+  function lvCompute(d) {
+    var st = { 1: lvBlank(), 2: lvBlank() };
+    for (var i = 0; i < d.events.length; i++) {
+      var e = d.events[i], x = st[e.tno];
+      if (!x) continue;
+      var b = x.q[e.per] || (x.q[e.per] = { pts: 0, hustle: 0, pitp: 0, tpm: 0, pot: 0 });
+      if (e.c === '2' || e.c === '3' || e.c === '1') {
+        if (e.c === '1') x.fta++; else x.fga++;
+        if (e.c === '3') x.tpa++;
+        if (e.ok) {
+          var v = Number(e.c);
+          x.pts += v; b.pts += v;
+          if (e.c !== '1') x.fgm++;
+          if (e.c === '3') { x.tpm++; b.tpm++; }
+          if (e.q.indexOf('f') >= 0) { x.fb += v; b.hustle += v; }
+          if (e.q.indexOf('s') >= 0) { x.sc += v; b.hustle += v; }
+          if (e.q.indexOf('p') >= 0) { x.pitp += v; b.pitp += v; }
+          if (e.q.indexOf('t') >= 0) { x.pot += v; b.pot += v; }
+        }
+      } else if (e.c === 'O') x.oreb++;
+      else if (e.c === 'D') x.dreb++;
+      else if (e.c === 'T') x.to++;
+    }
+    return st;
+  }
+  function lvDerived(x, o) {
+    var poss = x.fga - x.oreb + x.to + 0.44 * x.fta, tb = x.fga + 0.44 * x.fta + x.to;
+    return {
+      poss: poss,
+      ortg: poss > 0 ? x.pts / poss * 100 : null,
+      efg: x.fga ? (x.fgm + 0.5 * x.tpm) / x.fga * 100 : null,
+      tov: tb ? x.to / tb * 100 : null,
+      orb: (x.oreb + o.dreb) ? x.oreb / (x.oreb + o.dreb) * 100 : null,
+      ftr: x.fga ? x.fta / x.fga * 100 : null
+    };
+  }
+  function f1(v) { return v === null || v === undefined || !isFinite(v) ? '–' : v.toFixed(1); }
+  function lvFill(v, lo, hi) { return v === null || !isFinite(v) ? 0 : Math.max(2, Math.min(100, (v - lo) / (hi - lo) * 100)); }
+  function lvStatusUs(v, p, t, done, started) {
+    if (!started) return ['', 'Not started'];
+    if (v >= t) return ['good', 'Hit'];
+    if (done) return ['bad', 'Missed'];
+    if (p === null) return ['', 'Too early'];
+    if (p >= t) return ['good', 'On pace'];
+    if (p >= t * 0.85) return ['warn', 'Close'];
+    return ['bad', 'Behind'];
+  }
+  function lvStatusThem(v, p, t, done, started) {
+    if (!started) return ['', 'Not started'];
+    if (v >= t) return ['bad', 'Broken'];
+    if (done) return ['good', 'Held'];
+    if (p === null) return ['', 'Too early'];
+    if (p >= t) return ['bad', 'Over pace'];
+    if (p >= t * 0.85) return ['warn', 'Close'];
+    return ['good', 'Under'];
+  }
+
+  function lvBarHTML(g) {
+    var d = LV.d, pill, cls = '';
+    var age = LV.at ? Math.round((Date.now() - LV.at) / 1000) : null;
+    if (!LV.ok && LV.fails) {
+      cls = age !== null && age < 60 ? 'warn' : 'bad';
+      pill = age !== null ? 'Feed lost · ' + age + 's old' : 'No feed';
+    } else if (!d) pill = 'Connecting';
+    else if (d.ended) pill = 'Final';
+    else if (!d.events.length && d.per === 1 && d.rem >= lvL(d)) pill = 'Pre-game';
+    else { cls = 'live'; pill = 'Live · ' + (age || 0) + 's'; }
+    var h = '<span class="lv-pill ' + cls + '"><span class="dot"></span>' + esc(pill) + '</span>';
+    if (d) {
+      var us = lvWe(g), them = us === '1' ? '2' : '1', tu = lvTeam(d, us), th = lvTeam(d, them);
+      var su = us === '1' ? d.score1 : d.score2, sh = us === '1' ? d.score2 : d.score1;
+      h += '<span class="lv-board num"><span class="lbl">' + esc(tu.code) + '</span> <b class="us">' + su + '</b> <span class="muted">–</span> <b>' + sh + '</b> <span class="lbl">' + esc(th.code) + '</span>' +
+        '<span class="lv-clk">' + (d.ended ? 'Final' : lvPerLabel(d.per) + ' ' + lvClock(d.rem)) + '</span></span>';
+      h += '<span class="seg" role="group" aria-label="Which team is us">' +
+        '<button type="button" class="' + (us === '1' ? 'on' : '') + '" data-a="lvWe" data-v="1">' + esc(d.t1.code) + '</button>' +
+        '<button type="button" class="' + (us === '2' ? 'on' : '') + '" data-a="lvWe" data-v="2">' + esc(d.t2.code) + '</button></span>';
+    }
+    if (LV.err && !d) h += '<span class="hint" style="flex-basis:100%">' + esc(lvErrText(LV.err)) + '</span>';
+    return h;
+  }
+  function lvErrText(err) {
+    if (err === 'nohost') return 'Live data comes through this app\'s api/game relay, which isn\'t available on this copy of the page. Open the installed app with a data connection.';
+    if (err === 'offline') return 'No connection. Retrying every few seconds.';
+    return err;
+  }
+
+  function lvStatsHTML(g) {
+    var d = LV.d;
+    if (!d) return '<div class="empty">' + (LV.err ? esc(lvErrText(LV.err)) : 'Connecting to LiveStats…') + '</div>';
+    var st = lvCompute(d), us = lvWe(g), them = us === '1' ? '2' : '1', U = st[us], H = st[them];
+    var tu = lvTeam(d, us), th = lvTeam(d, them);
+    var nowEl = lvElapsed(d, d.per, d.rem), reg = 4 * lvL(d), done = d.ended;
+    var started = nowEl > 0 || d.events.length > 0;
+    var projOn = !done && nowEl >= 120 && nowEl < reg;
+    function proj(v) { return done || nowEl >= reg ? v : (projOn ? Math.round(v * reg / nowEl) : null); }
+    var tg = lvTargets(), i;
+
+    var defs = [
+      { t: 'Fast break + 2nd chance', target: tg.hustle, v: function (x) { return x.fb + x.sc; }, sub: function (x) { return 'Fast break ' + x.fb + ' · 2nd chance ' + x.sc; } },
+      { t: 'Points in the paint', target: tg.paint, v: function (x) { return x.pitp; }, sub: function (x) { return (x.pts ? Math.round(x.pitp / x.pts * 100) : 0) + '% of points'; } },
+      { t: 'Threes made', target: tg.three, v: function (x) { return x.tpm; }, sub: function (x) { return x.tpm + '/' + x.tpa + ' · ' + (x.tpa ? Math.round(x.tpm / x.tpa * 100) : 0) + '%'; } }
+    ];
+    var tgts = '';
+    for (i = 0; i < defs.length; i++) {
+      var df = defs[i], vu = df.v(U), vh = df.v(H), pu = proj(vu), ph = proj(vh);
+      var max = Math.max(df.target * 1.4, vu, vh, pu || 0, ph || 0);
+      var su = lvStatusUs(vu, pu, df.target, done, started), sh = lvStatusThem(vh, ph, df.target, done, started);
+      tgts += '<div class="card lv-tgt"><div class="spread"><span class="lbl" style="color:var(--ink)">' + df.t + '</span><span class="muted" style="font-size:13px">Target <b class="num" style="color:var(--ink)">' + df.target + '</b></span></div>' +
+        lvSide('us', tu.code, 'reach', vu, pu, su, max, df.target, df.sub(U), projOn) +
+        '<div class="lv-hr"></div>' +
+        lvSide('them', th.code, 'hold under', vh, ph, sh, max, df.target, df.sub(H), projOn) + '</div>';
+    }
+
+    var dU = lvDerived(U, H), dH = lvDerived(H, U), enough = started && dU.poss >= 5 && dH.poss >= 5;
+    var pace = enough && nowEl > 0 ? ((dU.poss + dH.poss) / 2) * reg / nowEl : null;
+    var net = enough ? dU.ortg - dH.ortg : null;
+    function edge(a, b, hi) {
+      if (!enough || a === null || b === null) return '';
+      var df2 = a - b;
+      if (Math.abs(df2) < 0.05) return '<span class="lv-badge">Level</span>';
+      var good = hi ? df2 > 0 : df2 < 0;
+      return '<span class="lv-badge ' + (good ? 'good' : 'bad') + '">' + (good ? 'Ahead ' : 'Behind ') + Math.abs(df2).toFixed(1) + '</span>';
+    }
+    function cmp(a, b, hi) { return !enough || a === null || b === null || a === b ? '' : ((hi ? a > b : a < b) ? 'good' : 'bad'); }
+    function met(label, val, badge, w, c, foot) {
+      return '<div class="card lv-met"><div class="spread"><span class="lbl">' + label + '</span>' + badge + '</div>' +
+        '<div class="lv-val num">' + val + '</div><div class="lv-mbar"><i class="' + c + '" style="width:' + w + '%"></i></div><div class="muted" style="font-size:13px">' + foot + '</div></div>';
+    }
+    function pc(v) { return enough ? f1(v) + '%' : '–'; }
+    var ratings =
+      met('ORtg', enough ? f1(dU.ortg) : '–', edge(dU.ortg, dH.ortg, true), enough ? lvFill(dU.ortg, 70, 135) : 0, cmp(dU.ortg, dH.ortg, true), U.pts + ' pts on <b class="num">' + f1(dU.poss) + '</b> poss') +
+      met('DRtg', enough ? f1(dH.ortg) : '–', edge(dH.ortg, dU.ortg, false), enough ? lvFill(dH.ortg, 70, 135) : 0, cmp(dH.ortg, dU.ortg, false), H.pts + ' allowed on <b class="num">' + f1(dH.poss) + '</b> poss') +
+      met('Net', enough ? (net > 0 ? '+' : '') + f1(net) : '–', '', enough ? lvFill(net, -30, 30) : 0, enough ? (net > 0 ? 'good' : net < 0 ? 'bad' : '') : '', 'Points per 100 possessions') +
+      met('Pace', pace !== null ? f1(pace) : '–', '', pace !== null ? lvFill(pace, 60, 90) : 0, '', 'Possessions per 40 min');
+    var factors =
+      met('eFG%', pc(dU.efg), edge(dU.efg, dH.efg, true), enough ? lvFill(dU.efg, 30, 70) : 0, cmp(dU.efg, dH.efg, true), esc(th.code) + ' <b class="num">' + pc(dH.efg) + '</b>') +
+      met('TOV%', pc(dU.tov), edge(dU.tov, dH.tov, false), enough ? lvFill(dU.tov, 0, 30) : 0, cmp(dU.tov, dH.tov, false), esc(th.code) + ' <b class="num">' + pc(dH.tov) + '</b> · ' + U.to + ' v ' + H.to + ' TO') +
+      met('OREB%', pc(dU.orb), edge(dU.orb, dH.orb, true), enough ? lvFill(dU.orb, 0, 50) : 0, cmp(dU.orb, dH.orb, true), esc(th.code) + ' <b class="num">' + pc(dH.orb) + '</b> · ' + U.oreb + ' v ' + H.oreb + ' boards') +
+      met('FT rate', pc(dU.ftr), edge(dU.ftr, dH.ftr, true), enough ? lvFill(dU.ftr, 0, 60) : 0, cmp(dU.ftr, dH.ftr, true), esc(th.code) + ' <b class="num">' + pc(dH.ftr) + '</b> · FTA per FGA');
+
+    var pers = [1, 2, 3, 4], k;
+    for (k in U.q) if (pers.indexOf(Number(k)) < 0) pers.push(Number(k));
+    for (k in H.q) if (pers.indexOf(Number(k)) < 0) pers.push(Number(k));
+    pers.sort(function (a, b) { return a - b; });
+    var rowsDef = [['FB + 2nd chance', 'hustle'], ['Paint', 'pitp'], ['Threes made', 'tpm'], ['Points off TO', 'pot'], ['Points', 'pts']];
+    var head = '<tr><th></th>', body = '', j;
+    for (j = 0; j < pers.length; j++) head += '<th class="r ' + (pers[j] === d.per && !done && started ? 'lv-now' : '') + '">' + lvPerLabel(pers[j]) + '</th>';
+    head += '</tr>';
+    for (i = 0; i < rowsDef.length; i++) {
+      body += '<tr><td style="font-weight:600">' + rowsDef[i][0] + '</td>';
+      for (j = 0; j < pers.length; j++) {
+        var p = pers[j], a = (U.q[p] || {})[rowsDef[i][1]] || 0, bb = (H.q[p] || {})[rowsDef[i][1]] || 0;
+        body += '<td class="r num ' + (p === d.per && !done && started ? 'lv-now' : '') + '">' + (p > d.per && !done ? '<span class="muted">·</span>' : '<b class="lv-us">' + a + '</b> <span class="muted">–</span> ' + bb) + '</td>';
+      }
+      body += '</tr>';
+    }
+
+    return '<div class="lv-sec"><span class="lbl">Game targets</span><span class="muted" style="font-size:13px">' +
+        (projOn ? 'On pace = projected to 40 min from ' + lvClock(nowEl) + ' played' : (done ? 'Final' : '')) +
+        ' · <button type="button" class="lv-link" data-a="lvTargets">Edit targets</button></span></div>' +
+      (S.lvTEdit ? '<div class="card row" style="flex-wrap:wrap">' +
+        '<label class="lbl" for="lvt-h">FB + 2nd</label><input class="lv-in small" id="lvt-h" type="number" inputmode="numeric" data-lvt="hustle" value="' + tg.hustle + '">' +
+        '<label class="lbl" for="lvt-p">Paint</label><input class="lv-in small" id="lvt-p" type="number" inputmode="numeric" data-lvt="paint" value="' + tg.paint + '">' +
+        '<label class="lbl" for="lvt-3">3PM</label><input class="lv-in small" id="lvt-3" type="number" inputmode="numeric" data-lvt="three" value="' + tg.three + '">' +
+        '<button type="button" class="btn" data-a="lvTargets">Done</button></div>' : '') +
+      '<div class="lv-g3">' + tgts + '</div>' +
+      '<div class="lv-sec"><span class="lbl">Team ratings · live</span><span class="muted" style="font-size:13px">Per 100 possessions</span></div>' +
+      '<div class="lv-g4">' + ratings + '</div>' +
+      '<div class="lv-sec"><span class="lbl">Four factors</span><span class="muted" style="font-size:13px">Ours, with theirs underneath</span></div>' +
+      '<div class="lv-g4">' + factors + '</div>' +
+      '<div class="lv-sec"><span class="lbl">By quarter</span><span class="muted" style="font-size:13px">' + esc(tu.code) + ' – ' + esc(th.code) + '</span></div>' +
+      '<div class="card scroll-x"><table class="tbl"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+  }
+  function lvSide(cls, code, role, v, p, s, max, target, sub, projOn) {
+    return '<div class="lv-side ' + cls + '"><div class="spread"><span class="lv-who">' + esc(code) + ' <span class="lbl" style="font-size:11px">' + role + '</span></span><span class="lv-badge ' + s[0] + '">' + s[1] + '</span></div>' +
+      '<div class="row" style="align-items:baseline"><span class="lv-big num">' + v + '</span>' + (projOn ? '<span class="muted" style="font-size:13px">on pace for <b class="num" style="color:var(--ink)">' + p + '</b></span>' : '') + '</div>' +
+      '<div class="lv-track" role="img" aria-label="' + v + ' against a target of ' + target + (projOn ? ', on pace for ' + p : '') + '">' +
+        (projOn ? '<span class="proj" style="width:' + Math.min(100, p / max * 100) + '%"></span>' : '') +
+        '<span class="act" style="width:' + Math.min(100, v / max * 100) + '%"></span><span class="tick" style="left:' + (target / max * 100) + '%"></span></div>' +
+      '<div class="muted" style="font-size:13px">' + sub + '</div></div>';
+  }
+
+  function lvNow(g) {
+    if (LV.d) return { per: LV.d.per, rem: LV.d.rem };
+    var qi = QUARTERS.indexOf(g.curQ);
+    return { per: qi < 0 ? 1 : qi + 1, rem: 600 };
+  }
+  function lvAto(per, rem) {
+    if (!LV.d) return false;
+    for (var i = 0; i < LV.d.events.length; i++) {
+      var e = LV.d.events[i];
+      if (e.c === 'X' && e.per === per && e.rem >= rem && e.rem - rem <= 30) return true;
+    }
+    return false;
+  }
+  function lvSortedCalls(g, asc) {
+    var d = LV.d || { periodLen: 10 };
+    return (g.calls || []).slice().sort(function (a, b) { var x = lvElapsed(d, a.per, a.rem) - lvElapsed(d, b.per, b.rem); return asc ? x : -x; });
+  }
+
+  function lvCallsHTML(g) {
+    var dr = LV.draft, n = lvNow(g), i, comp = '';
+    if (dr) {
+      var maxPer = Math.max(5, dr.per), pb = '', bk = lvBook(g), bh = '', th = '';
+      for (i = 1; i <= maxPer; i++) pb += '<button type="button" class="' + (dr.per === i ? 'on' : '') + '" data-a="lvPer" data-v="' + i + '">' + lvPerLabel(i) + '</button>';
+      for (i = 0; i < bk.length; i++) bh += '<button type="button" class="btn ' + (dr.call === bk[i] ? 'on' : '') + '" data-a="lvBook" data-v="' + esc(bk[i]) + '">' + esc(bk[i]) + '</button>';
+      for (i = 0; i < LV_TAGS.length; i++) th += '<button type="button" class="btn ' + (dr.tags.indexOf(LV_TAGS[i]) >= 0 ? 'on' : '') + '" data-a="lvTag" data-v="' + LV_TAGS[i] + '">' + LV_TAGS[i] + '</button>';
+      comp = '<div class="lv-comp stack">' +
+        '<div class="row" style="flex-wrap:wrap"><span class="lv-stampbig num">' + lvPerLabel(dr.per) + ' ' + lvClock(dr.rem) + '</span>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="30" aria-label="Add 30 seconds">+30</button>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="5" aria-label="Add 5 seconds">+5</button>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="1" aria-label="Add 1 second">+1</button>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="-1" aria-label="Take 1 second off">−1</button>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="-5" aria-label="Take 5 seconds off">−5</button>' +
+          '<button type="button" class="btn" data-a="lvNudge" data-v="-30" aria-label="Take 30 seconds off">−30</button></div>' +
+        '<div><div class="seg" role="group" aria-label="Quarter">' + pb + '</div></div>' +
+        '<input class="lv-in" id="lv-call" type="text" autocomplete="off" autocapitalize="words" enterkeyhint="done" data-lvd="call" value="' + esc(dr.call) + '" placeholder="Call name, or leave blank to name it later" aria-label="Call name">' +
+        (bh ? '<div class="lv-chips">' + bh + '</div>' : '<div class="hint">Calls you name are kept for the next game against ' + esc(lvOppKey(g)) + '.</div>') +
+        '<div class="lv-chips">' + th + '</div>' +
+        (dr.autoAto ? '<div class="hint">Tagged ATO: a timeout came within 30 seconds of game clock.</div>' : '') +
+        '<input class="lv-in" id="lv-note" type="text" autocomplete="off" data-lvd="note" value="' + esc(dr.note) + '" placeholder="Note (optional): who it was for, result" aria-label="Note">' +
+        '<div class="g2"><button type="button" class="btn big" data-a="lvCancel">Discard</button><button type="button" class="btn big primary" data-a="lvSave">Save call</button></div></div>';
+    }
+    var calls = lvSortedCalls(g, false), rows = '';
+    for (i = 0; i < calls.length; i++) {
+      var c = calls[i], dk = 'lvdel:' + c.id, tags = '';
+      for (var t = 0; t < (c.tags || []).length; t++) tags += '<span class="tag" style="margin-right:4px">' + esc(c.tags[t]) + '</span>';
+      rows += '<div class="lv-row"><div class="num"><b style="font-size:17px">' + lvClock(c.rem) + '</b><div class="lbl">' + lvPerLabel(c.per) + '</div></div>' +
+        '<div style="min-width:0"><div style="font-weight:600;overflow-wrap:break-word">' + esc(c.call) + '</div>' +
+          (tags || c.note ? '<div class="muted" style="font-size:13px">' + tags + esc(c.note || '') + '</div>' : '') + '</div>' +
+        '<div class="row"><button type="button" class="btn ghost" data-a="lvEdit" data-v="' + c.id + '" style="min-height:40px">Edit</button>' +
+        '<button type="button" class="btn ' + (S.confirm === dk ? 'warn' : 'ghost') + '" data-a="lvDel" data-v="' + c.id + '" style="min-height:40px">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button></div></div>';
+    }
+    if (!rows) rows = '<div class="empty">Tap CALL the moment they signal a play. Quarter and game clock are stamped from the feed, so name it now or later and find it on video after.</div>';
+    return '<section class="card stack" aria-label="Their play calls">' +
+      '<div class="spread"><h2 class="h" style="font-size:21px">Their calls</h2><span class="muted num" style="font-size:13px">' + (g.calls || []).length + ' logged</span></div>' +
+      '<button type="button" class="btn big lv-callbtn" data-a="lvCall"><span>CALL</span><span class="num" id="lv-stamp">' + lvPerLabel(n.per) + ' ' + lvClock(n.rem) + '</span></button>' +
+      comp + '<div>' + rows + '</div>' +
+      '<div class="g2"><button type="button" class="btn" data-a="lvCopy">Copy list</button><button type="button" class="btn" data-a="lvCSV">Export CSV</button></div>' +
+      '</section>';
+  }
+
+  function liveHTML(g) {
+    if (!g.ls) {
+      return '<section class="card stack" style="max-width:640px" aria-label="Connect to LiveStats">' +
+        '<h2 class="h" style="font-size:21px">Connect this game to LiveStats</h2>' +
+        '<p class="hint" style="margin:0">Paste the game\'s LiveStats link (like fibalivestats…/u/SLB/2882445/) or just the game number. ' +
+          'You get live targets, team ratings and four factors, plus a log of their play calls stamped with the game clock. Needs the iPad\'s data connection.</p>' +
+        '<div class="field"><label class="lbl" for="lv-link">LiveStats link or game number</label>' +
+          '<input id="lv-link" class="lv-in" type="text" inputmode="url" autocomplete="off" data-lvlink="1" value="' + esc(S.lvLink || '') + '" placeholder="https://fibalivestats.dcd.shared.geniussports.com/u/SLB/…"></div>' +
+        '<button type="button" class="btn big primary" data-a="lvConnect">Connect</button>' +
+      '</section>';
+    }
+    return '<div class="card lv-top" id="lv-bar">' + lvBarHTML(g) + '</div>' +
+      '<div class="lv-grid">' +
+        '<div class="lv-col" id="lv-stats">' + lvStatsHTML(g) + '</div>' +
+        '<div class="lv-col">' + lvCallsHTML(g) +
+          '<p class="hint" style="margin:0">LiveStats game ' + esc(g.ls) + ' · <button type="button" class="lv-link" data-a="lvChange">Change game</button></p></div>' +
+      '</div>';
+  }
+
+  /* live refresh without rebuilding the page, so typing in the call box isn't interrupted */
+  function lvRefresh() {
+    var g = G();
+    if (S.view !== 'game' || S.tab !== 'live' || !g) return;
+    var bar = document.getElementById('lv-bar'), stats = document.getElementById('lv-stats'), stamp = document.getElementById('lv-stamp');
+    if (bar) bar.innerHTML = lvBarHTML(g);
+    var ae = document.activeElement;
+    if (stats && !(ae && ae.getAttribute && ae.getAttribute('data-lvt'))) stats.innerHTML = lvStatsHTML(g);
+    if (stamp) { var n = lvNow(g); stamp.textContent = lvPerLabel(n.per) + ' ' + lvClock(n.rem); }
+  }
+  function lvFail(err) { LV.ok = false; LV.fails++; LV.err = err; }
+  function lvPoll() {
+    clearTimeout(LV.timer); LV.timer = null;
+    var gid = LV.gameId, id = LV.lsId;
+    if (!gid || !id) return;
+    var x = new XMLHttpRequest();
+    x.open('GET', 'api/game?id=' + encodeURIComponent(id) + '&_=' + Date.now(), true);
+    x.timeout = 8000;
+    function done() {
+      if (LV.gameId !== gid || LV.lsId !== id) return;
+      lvRefresh();
+      LV.timer = setTimeout(lvPoll, LV.d && LV.d.ended ? LV_POLL_SLOW : LV_POLL);
+    }
+    x.onload = function () {
+      if (LV.gameId !== gid || LV.lsId !== id) return;
+      var j = null;
+      try { j = JSON.parse(x.responseText); } catch (e) {}
+      if (x.status === 200 && j && j.t1) { lvApply(j); LV.ok = true; LV.at = Date.now(); LV.err = ''; LV.fails = 0; }
+      else lvFail(j && j.error ? j.error : (j ? 'Feed answered ' + x.status : 'nohost'));
+      done();
+    };
+    x.onerror = function () { if (LV.gameId === gid && LV.lsId === id) { lvFail('offline'); done(); } };
+    x.ontimeout = function () { if (LV.gameId === gid && LV.lsId === id) { lvFail('Feed timed out'); done(); } };
+    try { x.send(); } catch (e) { lvFail('offline'); done(); }
+  }
+  /* start or stop the feed to match the open game */
+  function lvSync() {
+    var g = G(), on = S.view === 'game' && g && g.ls;
+    var want = on ? g.id + '|' + g.ls : '', have = LV.gameId ? LV.gameId + '|' + LV.lsId : '';
+    if (want === have) return;
+    clearTimeout(LV.timer); LV.timer = null;
+    if (!on || LV.gameId !== g.id) LV.draft = null;
+    LV.gameId = on ? g.id : null; LV.lsId = on ? g.ls : null;
+    LV.d = null; LV.ok = false; LV.at = 0; LV.err = ''; LV.fails = 0;
+    if (on) lvPoll();
+  }
+  setInterval(function () {
+    if (S.view === 'game' && S.tab === 'live' && LV.gameId) { var bar = document.getElementById('lv-bar'); var g = G(); if (bar && g) bar.innerHTML = lvBarHTML(g); }
+  }, 1000);
+
+  function lvSaveDraft(g) {
+    var dr = LV.draft;
+    if (!dr) return;
+    g.calls = g.calls || [];
+    var call = String(dr.call || '').replace(/^\s+|\s+$/g, '') || 'Unknown';
+    var rec = { id: dr.id || uid(), per: dr.per, rem: dr.rem, call: call, tags: dr.tags.slice(), note: String(dr.note || '').replace(/^\s+|\s+$/g, ''), opp: lvOppKey(g), at: dr.at || new Date().toISOString() };
+    var found = false;
+    for (var i = 0; i < g.calls.length; i++) if (g.calls[i].id === rec.id) { g.calls[i] = rec; found = true; }
+    if (!found) g.calls.push(rec);
+    if (call !== 'Unknown') lvAddToBook(g, call);
+    saveGame(g);
+    LV.draft = null;
+    toast('Logged ' + lvPerLabel(rec.per) + ' ' + lvClock(rec.rem) + ': ' + call);
+  }
+  function lvCsv(g) {
+    var lines = ['opponent,date,livestats_game,quarter,clock,call,tags,note,logged_at'];
+    var cs = lvSortedCalls(g, true);
+    for (var i = 0; i < cs.length; i++) {
+      var c = cs[i];
+      var row = [g.opp, g.date, g.ls || '', lvPerLabel(c.per), lvClock(c.rem), c.call, (c.tags || []).join('; '), c.note || '', c.at];
+      lines.push(row.map(function (v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','));
+    }
+    return lines.join('\n');
+  }
+  function lvText(g) {
+    var cs = lvSortedCalls(g, true), out = ['vs ' + g.opp + ' · ' + niceDate(g.date) + ' · their calls'];
+    for (var i = 0; i < cs.length; i++) {
+      var c = cs[i];
+      out.push(lvPerLabel(c.per) + ' ' + lvClock(c.rem) + '  ' + c.call + ((c.tags || []).length ? '  [' + c.tags.join(', ') + ']' : '') + (c.note ? '  ' + c.note : ''));
+    }
+    return out.join('\n');
+  }
+  function lvAct(a, v, g) {
+    var dr = LV.draft;
+    switch (a) {
+      case 'lvConnect':
+        var id = lvParseId(S.lvLink);
+        if (!id) { toast('Paste the LiveStats link or the game number'); return false; }
+        g.ls = id; g.lsWe = null; saveGame(g); S.lvLink = '';
+        return true;
+      case 'lvChange': g.ls = null; g.lsWe = null; saveGame(g); return true;
+      case 'lvWe': g.lsWe = v; saveGame(g); return true;
+      case 'lvTargets': S.lvTEdit = !S.lvTEdit; return true;
+      case 'lvCall':
+        var n = lvNow(g), ato = lvAto(n.per, n.rem);
+        LV.draft = { id: null, per: n.per, rem: n.rem, call: '', note: '', tags: ato ? ['ATO'] : [], autoAto: ato };
+        return true;
+      case 'lvNudge': if (dr) dr.rem = Math.max(0, Math.min(lvPerLen(LV.d, dr.per), dr.rem + Number(v))); return true;
+      case 'lvPer': if (dr) { dr.per = Number(v); dr.rem = Math.min(dr.rem, lvPerLen(LV.d, dr.per)); } return true;
+      case 'lvBook': if (dr) dr.call = v; return true;
+      case 'lvTag': if (dr) { var ix = dr.tags.indexOf(v); if (ix >= 0) dr.tags.splice(ix, 1); else dr.tags.push(v); } return true;
+      case 'lvCancel': LV.draft = null; return true;
+      case 'lvSave': lvSaveDraft(g); return true;
+      case 'lvEdit':
+        var cs = g.calls || [];
+        for (var i = 0; i < cs.length; i++) if (cs[i].id === v) {
+          LV.draft = { id: cs[i].id, per: cs[i].per, rem: cs[i].rem, call: cs[i].call === 'Unknown' ? '' : cs[i].call, note: cs[i].note || '', tags: (cs[i].tags || []).slice(), at: cs[i].at };
+        }
+        return true;
+      case 'lvDel':
+        if (S.confirm === 'lvdel:' + v) {
+          g.calls = (g.calls || []).filter(function (c) { return c.id !== v; });
+          saveGame(g); S.confirm = null; toast('Call deleted');
+        } else armConfirm('lvdel:' + v);
+        return true;
+      case 'lvCopy':
+        if (!(g.calls || []).length) { toast('No calls logged yet'); return false; }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lvText(g)).then(function () { toast('Calls copied'); }, function () { toast('Copy was blocked here'); });
+        else toast('Copy isn\'t available here');
+        return false;
+      case 'lvCSV':
+        if (!(g.calls || []).length) { toast('No calls logged yet'); return false; }
+        saveFile(fileName(g, 'calls.csv'), 'text/csv', lvCsv(g));
+        return false;
+    }
+    return false;
+  }
+
   /* ---------- Actions ---------- */
   function act(a, v, el) {
     var g = G(), f = S.f;
+    if (a.indexOf('lv') === 0) { if (g && lvAct(a, v, g)) render(); return; }
     switch (a) {
       case 'open': S.gameId = v; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
       case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); break;
@@ -699,9 +1211,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         var opp = S.newGame.opp.replace(/^\s+|\s+$/g, '');
         if (!opp) { toast('Add the opponent\'s name first'); var o = document.getElementById('ng-opp'); if (o) o.focus(); return; }
         var ng = { id: uid(), opp: opp, date: S.newGame.date || todayISO(), venue: S.newGame.venue, roster: parseRoster(S.newGame.roster),
-          curQ: 'Q1', marks: {}, poss: [], created: Date.now() };
+          curQ: 'Q1', marks: {}, poss: [], calls: [], ls: lvParseId(S.newGame.ls), created: Date.now() };
         saveGame(ng);
-        S.newGame = { opp: '', date: todayISO(), venue: 'Home', roster: '' };
+        S.newGame = { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' };
         S.gameId = ng.id; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.role = 'creator';
         wake();
         break;
@@ -806,10 +1318,22 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var t = e.target;
     if (t.getAttribute('data-ng')) S.newGame[t.getAttribute('data-ng')] = t.value;
     if (t.getAttribute('data-roster')) S.rosterDraft = t.value;
+    if (t.getAttribute('data-lvlink')) S.lvLink = t.value;
+    if (t.getAttribute('data-lvd') && LV.draft) LV.draft[t.getAttribute('data-lvd')] = t.value;
+  });
+  app.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (e.key !== 'Enter' || !t.getAttribute) return;
+    if (t.getAttribute('data-lvd')) { e.preventDefault(); act('lvSave', null, t); }
+    else if (t.getAttribute('data-lvlink')) { e.preventDefault(); act('lvConnect', null, t); }
   });
   app.addEventListener('change', function (e) {
     var t = e.target;
     if (t.id === 'import-file' && t.files && t.files[0]) importFile(t.files[0]);
+    if (t.getAttribute('data-lvt')) {
+      var tg = lvTargets(), nv = Math.round(Number(t.value));
+      if (nv > 0) { tg[t.getAttribute('data-lvt')] = nv; sset('targets', tg); }
+    }
   });
 
   /* ---------- Start ---------- */
