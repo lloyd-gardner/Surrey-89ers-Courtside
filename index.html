@@ -111,6 +111,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .gd-src .src .nm{font-size:17px}
 .gd-fin{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:8px;gap:8px}
 .gd-fin .btn{min-height:56px;font-size:16px}
+.gd-cov{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:8px;gap:8px}
+.gd-cov .btn{min-height:50px;font-size:16px}
 .gd-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:8px;gap:8px}
 .gd-res .btn{min-height:60px;font-family:var(--display);font-size:24px;font-weight:700;padding:0 4px}
 .gd-res .btn.ft{min-height:52px;font-size:19px}
@@ -249,7 +251,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     { id: 'Other', color: OTHER, finishes: ['Foul', 'Loose ball', 'Other'] }
   ];
   var WHERE = ['L side', 'L slot', 'Middle', 'R slot', 'R side'];
-  var COVS = ['Drop', 'Hedge', 'Switch', 'Ice', 'Blitz', 'Late'];
+  var COVS = ['Drop', 'Flat', 'Switch', 'Ice', 'Blitz', 'Late'];
   var RESULTS = [
     { id: '2', label: '2 pts', pts: 2, span: 's3' },
     { id: '3', label: '3 pts', pts: 3, span: 's3' },
@@ -323,6 +325,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     for (var i = 0; i < (g.poss || []).length; i++) {
       var p = g.poss[i], map = FINISH_RENAMES[p.src];
       if (map && p.fin && map[p.fin]) { p.fin = map[p.fin]; changed = true; }
+      if (p.cov === 'Hedge') { p.cov = 'Flat'; changed = true; }
     }
     return changed;
   }
@@ -411,7 +414,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   var S = {
     view: 'home', gameId: null, tab: 'quick', sumQ: 'All',
     f: blankForm(), role: 'creator', editId: null,
-    q: { src: null, fin: null }, listFilter: 'all',
+    q: { src: null, fin: null, cov: null }, listFilter: 'all',
     confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' },
     lvLink: '', lvTEdit: false,
     rosterEdit: false, rosterDraft: ''
@@ -596,8 +599,14 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var canLog = !!(f.src && f.res && (f.res !== 'FTs' || f.ft !== null));
     var editing = S.editId ? possById(g, S.editId) : null;
 
-    return (editing ? '<div class="edit-banner">' + (editing.quick ? 'Adding detail to game-day possession #' : 'Editing possession #') + esc(editing.n) +
-        ' (' + esc(editing.src + (editing.fin ? ' › ' + editing.fin : '') + ' · ' + resText(editing)) + '). Change anything, then Save changes.</div>' : '') +
+    var ord = editing ? sortedPoss(g) : [], pos = editing ? ord.indexOf(editing) + 1 : 0;
+    return (editing ? '<div class="edit-banner spread" style="flex-wrap:wrap">' +
+        '<div style="min-width:0;margin:4px 8px 4px 0"><b>#' + esc(editing.n) + ' · ' + esc(editing.q) + '</b> (' + pos + ' of ' + ord.length + ') · ' +
+          esc(editing.src + (editing.fin ? ' › ' + editing.fin : '') + (editing.cov ? ' · ' + editing.cov : '') + ' · ' + resText(editing)) +
+          (editing.quick ? ' <span class="tag todo">GAME DAY</span>' : '') + '<div style="font-size:13px;opacity:.8">Save changes moves you straight on to the next possession.</div></div>' +
+        '<div class="gbtns"><button type="button" class="btn" data-a="editStep" data-v="-1"' + (pos > 1 ? '' : ' disabled') + '>‹ Prev</button>' +
+          '<button type="button" class="btn" data-a="editStep" data-v="1"' + (pos < ord.length ? '' : ' disabled') + '>Skip ›</button>' +
+          '<button type="button" class="btn ghost" data-a="editDone">Done</button></div></div>' : startBanner(g)) +
       '<div class="log-grid">' +
         '<section class="card stack" aria-label="What started it">' +
           '<div class="spread"><h2 class="h" style="font-size:21px">1 · Source</h2><span class="muted" style="font-size:13px">pts tonight</span></div>' +
@@ -621,6 +630,26 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
             '<button type="button" class="btn big primary" data-a="log"' + (canLog ? '' : ' disabled') + '>' + (S.editId ? 'Save changes' : 'Log possession') + '</button></div>' +
         '</section>' +
       '</div>' + recentHTML(g);
+  }
+  function startBanner(g) {
+    var ord = sortedPoss(g); if (!ord.length) return '';
+    var firstTodo = null;
+    for (var i = 0; i < ord.length; i++) if (ord[i].quick) { firstTodo = ord[i]; break; }
+    return '<div class="sample-banner spread" style="flex-wrap:wrap"><span style="margin:4px 8px 4px 0">Watching back? Go through the possessions in order. Each save moves on to the next one.</span>' +
+      '<div class="gbtns">' + (firstTodo ? '<button type="button" class="btn primary" data-a="edit" data-v="' + firstTodo.id + '">Start at first needing detail (#' + firstTodo.n + ')</button>' : '') +
+      '<button type="button" class="btn" data-a="edit" data-v="' + ord[0].id + '">Start at #' + ord[0].n + '</button></div></div>';
+  }
+  function sortedPoss(g) { return g.poss.slice().sort(function (a, b) { return a.t - b.t || a.n - b.n; }); }
+  function neighbour(g, id, step) {
+    var ord = sortedPoss(g);
+    for (var i = 0; i < ord.length; i++) if (ord[i].id === id) return ord[i + step] || null;
+    return null;
+  }
+  function openEdit(g, id) {
+    var p = possById(g, id); if (!p) return;
+    S.f = { src: p.src, fin: p.fin, where: p.where, cov: p.cov, res: p.res, ft: p.ft, creator: p.creator, screener: p.screener, scorer: p.scorer, echoes: p.echoes.slice() };
+    S.editId = p.id; S.tab = 'log'; S.role = 'creator'; S.confirm = null;
+    try { window.scrollTo(0, 0); } catch (e) {}
   }
   function possById(g, id) { for (var i = 0; i < g.poss.length; i++) if (g.poss[i].id === id) return g.poss[i]; return null; }
   function needDetail(g) { var n = 0; for (var i = 0; i < g.poss.length; i++) if (g.poss[i].quick) n++; return n; }
@@ -657,6 +686,14 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         fin += '<button type="button" class="btn ' + (fon ? 'on' : '') + '" data-a="qfin" data-v="' + esc(sd.finishes[i]) + '" aria-pressed="' + fon + '">' + esc(sd.finishes[i]) + '</button>';
       }
       fin = '<div class="gd-fin">' + fin + '</div>';
+      if (sd.cov) {
+        var cv = '';
+        for (i = 0; i < COVS.length; i++) {
+          var con = q.cov === COVS[i];
+          cv += '<button type="button" class="btn ' + (con ? 'on' : '') + '" data-a="qcov" data-v="' + esc(COVS[i]) + '" aria-pressed="' + con + '">' + esc(COVS[i]) + '</button>';
+        }
+        fin += '<div class="stack" style="grid-gap:6px;gap:6px"><div class="lbl">Our coverage <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></div><div class="gd-cov">' + cv + '</div></div>';
+      }
     }
 
     var res = '';
@@ -664,7 +701,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       var r = QUICK_RESULTS[i];
       res += '<button type="button" class="btn ' + (r.ft ? 'ft' : r.stop ? 'stop' : '') + '" data-a="qres" data-v="' + esc(r.v) + '"' + (sd ? '' : ' disabled') + '>' + esc(r.label) + '</button>';
     }
-    var pick = sd ? '<b>' + esc(q.src + (q.fin ? ' › ' + q.fin : '')) + '</b> · tap the result to log it' : 'Tap a source, then the result';
+    var pick = sd ? '<b>' + esc(q.src + (q.fin ? ' › ' + q.fin : '') + (q.cov ? ' · ' + q.cov : '')) + '</b> · tap the result to log it' : 'Tap a source, then the result';
     var todo = needDetail(g);
 
     return '<div class="gd-grid">' +
@@ -680,7 +717,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           '<div class="gd-pick">' + pick + '</div>' +
           '<div class="gd-res">' + res + '</div>' +
           (sd ? '<button type="button" class="btn ghost" data-a="qclear">Clear</button>' : '') +
-          '<p class="hint" style="margin:0">' + (todo ? todo + ' game-day ' + (todo === 1 ? 'possession' : 'possessions') + ' to add detail to after the game (Possessions › Needs detail).' : 'Spots, coverage, players and echoes get added after the game in Post game.') + '</p>' +
+          '<p class="hint" style="margin:0">' + (todo ? todo + ' game-day ' + (todo === 1 ? 'possession' : 'possessions') + ' to add detail to after the game (Possessions › Needs detail).' : 'Spots, players and echoes get added after the game in Post game.') + '</p>' +
         '</section>' +
       '</div>' + recentHTML(g);
   }
@@ -692,12 +729,12 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     if (v.indexOf('FTs:') === 0) { res = 'FTs'; ft = Number(v.slice(4)); }
     var maxN = 0;
     for (var j = 0; j < g.poss.length; j++) maxN = Math.max(maxN, g.poss[j].n);
-    var rec = { id: uid(), n: maxN + 1, q: g.curQ, t: Date.now(), src: q.src, fin: q.fin, where: null, cov: null, res: res, ft: ft,
+    var rec = { id: uid(), n: maxN + 1, q: g.curQ, t: Date.now(), src: q.src, fin: q.fin, where: null, cov: sd.cov ? q.cov : null, res: res, ft: ft,
       pts: ptsFor(res, ft), creator: null, screener: null, scorer: null, echoes: [], early: !!sd.early, quick: true };
     g.poss.push(rec);
     saveGame(g);
-    S.q = { src: null, fin: null };
-    toast('Logged #' + rec.n + ': ' + rec.src + (rec.fin ? ' › ' + rec.fin : '') + ' · ' + resText(rec));
+    S.q = { src: null, fin: null, cov: null };
+    toast('Logged #' + rec.n + ': ' + rec.src + (rec.fin ? ' › ' + rec.fin : '') + (rec.cov ? ' · ' + rec.cov : '') + ' · ' + resText(rec));
   }
   function opt(key, val, label) {
     var on = S.f[key] === val;
@@ -1337,8 +1374,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var g = G(), f = S.f;
     if (a.indexOf('lv') === 0) { if (g && lvAct(a, v, g)) render(); return; }
     switch (a) {
-      case 'open': S.gameId = v; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null }; S.listFilter = 'all'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
-      case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); S.q = { src: null, fin: null }; break;
+      case 'open': S.gameId = v; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null, cov: null }; S.listFilter = 'all'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
+      case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); S.q = { src: null, fin: null, cov: null }; break;
       case 'ngVenue': S.newGame.venue = v; break;
       case 'startGame':
         var opp = S.newGame.opp.replace(/^\s+|\s+$/g, '');
@@ -1347,7 +1384,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           curQ: 'Q1', marks: {}, poss: [], calls: [], ls: lvParseId(S.newGame.ls), created: Date.now() };
         saveGame(ng);
         S.newGame = { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' };
-        S.gameId = ng.id; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null }; S.listFilter = 'all'; S.f = blankForm(); S.role = 'creator';
+        S.gameId = ng.id; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null, cov: null }; S.listFilter = 'all'; S.f = blankForm(); S.role = 'creator';
         wake();
         break;
       case 'delGame':
@@ -1355,10 +1392,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         else { armConfirm('delgame:' + v); }
         break;
       case 'tab': S.tab = v; S.confirm = null; break;
-      case 'qsrc': S.q = S.q.src === v ? { src: null, fin: null } : { src: v, fin: null }; break;
+      case 'qsrc': S.q = S.q.src === v ? { src: null, fin: null, cov: null } : { src: v, fin: null, cov: null }; break;
       case 'qfin': S.q.fin = S.q.fin === v ? null : v; break;
+      case 'qcov': S.q.cov = S.q.cov === v ? null : v; break;
       case 'qres': quickLog(g, v); break;
-      case 'qclear': S.q = { src: null, fin: null }; break;
+      case 'qclear': S.q = { src: null, fin: null, cov: null }; break;
       case 'listFilter': S.listFilter = v; S.confirm = null; break;
       case 'setQ': g.curQ = v; saveGame(g); break;
       case 'markQ': g.marks = g.marks || {}; g.marks[g.curQ] = Date.now(); saveGame(g); toast('Start of ' + g.curQ + ' marked'); break;
@@ -1393,13 +1431,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           saveGame(g); S.confirm = null; toast('Possession deleted');
         } else armConfirm('del:' + v);
         break;
-      case 'edit':
-        for (var m = 0; m < g.poss.length; m++) if (g.poss[m].id === v) {
-          var p = g.poss[m];
-          S.f = { src: p.src, fin: p.fin, where: p.where, cov: p.cov, res: p.res, ft: p.ft, creator: p.creator, screener: p.screener, scorer: p.scorer, echoes: p.echoes.slice() };
-          S.editId = p.id; S.tab = 'log'; S.role = 'creator';
-        }
-        break;
+      case 'edit': openEdit(g, v); break;
+      case 'editStep': var nb = neighbour(g, S.editId, Number(v)); if (nb) openEdit(g, nb.id); else toast(Number(v) > 0 ? 'That\'s the last possession' : 'That\'s the first possession'); break;
+      case 'editDone': S.editId = null; S.f = blankForm(); S.tab = 'list'; break;
       case 'rosterEdit': S.rosterEdit = true; S.rosterDraft = g.roster.join(' '); break;
       case 'rosterCancel': S.rosterEdit = false; break;
       case 'rosterSave': g.roster = parseRoster(S.rosterDraft); saveGame(g); S.rosterEdit = false; toast('Roster saved'); break;
@@ -1424,8 +1458,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         rec.id = old.id; rec.n = old.n; rec.q = old.q; rec.t = old.t;
         g.poss[i] = rec;
       }
+      var nx = neighbour(g, rec.id, 1);
+      saveGame(g);
+      if (nx) { openEdit(g, nx.id); toast('#' + rec.n + ' saved · now on #' + nx.n); return; }
       S.editId = null; S.tab = 'list';
-      toast('Possession #' + rec.n + ' updated');
+      toast('#' + rec.n + ' saved · that was the last possession');
     } else {
       var maxN = 0;
       for (var j = 0; j < g.poss.length; j++) maxN = Math.max(maxN, g.poss[j].n);
