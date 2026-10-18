@@ -65,12 +65,12 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .dot{display:inline-block;width:10px;height:10px;border-radius:3px;flex-shrink:0;vertical-align:middle}
 
 /* top bar */
-.top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;grid-gap:12px;gap:12px;padding-bottom:10px}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;grid-gap:12px;gap:12px;padding-bottom:10px}
 .crest{width:42px;height:42px;border-radius:50%;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:19px;flex-shrink:0}
 .score{text-align:center}
 .score .big{font-family:var(--display);font-weight:700;font-size:38px;line-height:1}
 .tabs{display:inline-grid;grid-auto-flow:column;grid-gap:4px;gap:4px;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
-.tab{min-height:44px;padding:0 14px;border:0;border-radius:10px;background:transparent;color:var(--ink);font-weight:600;font-size:15px}
+.tab{min-height:44px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:var(--ink);font-weight:600;font-size:15px;white-space:nowrap}
 .tab.on{background:var(--accent);color:var(--accent-ink)}
 .qbar{display:flex;align-items:center;flex-wrap:wrap;padding:0 0 6px}
 .qbar>*{margin:0 8px 6px 0}
@@ -103,6 +103,22 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .edit-banner{background:#2A2413;border:1px solid #6B5320;color:#FBE6BD;border-radius:12px;padding:8px 12px;margin-bottom:10px}
 .sample-banner{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:14px}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:12px;font-weight:600;max-width:90%;z-index:10}
+
+/* game day (quick log: source, finish, result) */
+.gd-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.1fr);grid-gap:12px;gap:12px;align-items:start}
+.gd-src{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:8px;gap:8px}
+.gd-src .src{min-height:76px;padding:10px 12px}
+.gd-src .src .nm{font-size:17px}
+.gd-fin{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:8px;gap:8px}
+.gd-fin .btn{min-height:56px;font-size:16px}
+.gd-res{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:8px;gap:8px}
+.gd-res .btn{min-height:60px;font-family:var(--display);font-size:24px;font-weight:700;padding:0 4px}
+.gd-res .btn.ft{min-height:52px;font-size:19px}
+.gd-res .btn.stop{grid-column:span 2;min-height:64px;background:var(--accent-soft);border-color:var(--accent-line);color:#9BE3BC}
+.gd-res .btn[disabled]{background:#222C27;border-color:#26332D;color:var(--faint)}
+.gd-pick{font-size:14px;color:var(--muted);min-height:20px}
+.gd-pick b{color:var(--ink)}
+.tag.todo{background:#2A2413;color:#F2C46A;border-color:#6B5320}
 
 /* list + tables */
 .tbl{width:100%;border-collapse:collapse;font-size:14px}
@@ -191,7 +207,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .lv-link{border:0;background:none;padding:0;color:var(--accent);font-weight:600;text-decoration:underline;font-size:13px}
 
 @media (max-width: 900px){
-  .log-grid,.sum-grid,.home-grid,.lv-grid,.lv-g3{grid-template-columns:minmax(0,1fr)}
+  .log-grid,.sum-grid,.home-grid,.lv-grid,.lv-g3,.gd-grid{grid-template-columns:minmax(0,1fr)}
   .recent{grid-template-columns:minmax(0,1fr) 96px}
   .recent .rc:nth-child(n+2){display:none}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -219,9 +235,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   /* ---------- Config: edit these lists to change the buttons ---------- */
   var OTHER = '#9085e9';
   var SOURCES = [
-    { id: 'Transition', color: '#3987e5', early: true, finishes: ['Run-out', 'Off our TO', 'Early 1-on-1', 'Trail three', 'Drag PNR', 'Spot up'] },
-    { id: 'PNR', color: '#d95926', screen: true, cov: true, finishes: ['Roll man', 'Drive middle', 'Drive baseline', 'Pull-up', 'Pass out', 'Pop', 'Spain', 'Reject'] },
-    { id: '1-on-1', color: '#199e70', finishes: ['Drive left', 'Drive right', 'Pull-up', 'Step-back'] },
+    { id: 'Transition', color: '#3987e5', early: true, finishes: ['One on One', 'Run Out', 'Turnover', 'Post Up', 'Spot Up', 'Drive and Kick'] },
+    { id: 'PNR', color: '#d95926', screen: true, cov: true, finishes: ['Drive and Kick', 'Drive and Dump', 'Roll Finish', 'Jumper', 'Pass Out', 'Pick and Pop', 'Drive', 'Spain', 'Cutter', 'Reject'] },
+    { id: '1-on-1', color: '#199e70', finishes: ['Drive and Dump', 'Drive and Kick', 'Drive Finish', 'Pull Up'] },
     { id: 'Post up', color: '#c98500', finishes: ['Middle hook', 'Baseline turn', 'Face-up J', 'Kick out', 'Cutter'] },
     { id: 'Off. rebound', color: '#d55181', early: true, finishes: ['Put back', 'Kick out', 'Reset'] },
     { id: 'Cut', color: OTHER, finishes: ['Baseline', '45 cut', 'Backdoor'] },
@@ -246,6 +262,12 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   var ECHOES = ['Make contact in tagging up', 'Contest every shot', 'Guard your man without help for two dribbles',
     'Win the physicality battle', "Don't get screened", 'Apply our defensive pressure points'];
   var QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4', 'OT'];
+  // Game day results: one tap logs the possession. FTs carry the number made after the colon.
+  var QUICK_RESULTS = [
+    { v: '2', label: '2' }, { v: '3', label: '3' }, { v: '2+1', label: '2+1' }, { v: '3+1', label: '3+1' },
+    { v: 'FTs:0', label: '0 FT', ft: true }, { v: 'FTs:1', label: '1 FT', ft: true }, { v: 'FTs:2', label: '2 FT', ft: true }, { v: 'FTs:3', label: '3 FT', ft: true },
+    { v: 'Miss', label: 'Miss', stop: true }, { v: 'TO', label: 'Turnover', stop: true }
+  ];
 
   /* ---------- Storage (this device only; works with no internet) ---------- */
   var PREFIX = 'cs89.';
@@ -287,8 +309,22 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var ids = sget('index') || [];
     for (var i = 0; i < ids.length; i++) {
       var g = sget('game.' + ids[i]);
-      if (g && g.id) { games[g.id] = g; order.push(g.id); }
+      if (g && g.id) { if (renameFinishes(g)) sset('game.' + g.id, g); games[g.id] = g; order.push(g.id); }
     }
+  }
+  // Finish names that have since been renamed. Games saved with the old names are updated when the app opens.
+  var FINISH_RENAMES = {
+    PNR: { 'Roll man': 'Roll Finish', 'Pull-up': 'Jumper', 'Pass out': 'Pass Out', 'Pop': 'Pick and Pop', 'Drive middle': 'Drive', 'Drive baseline': 'Drive' },
+    Transition: { 'Run-out': 'Run Out', 'Off our TO': 'Turnover', 'Early 1-on-1': 'One on One', 'Spot up': 'Spot Up' },
+    '1-on-1': { 'Pull-up': 'Pull Up' }
+  };
+  function renameFinishes(g) {
+    var changed = false;
+    for (var i = 0; i < (g.poss || []).length; i++) {
+      var p = g.poss[i], map = FINISH_RENAMES[p.src];
+      if (map && p.fin && map[p.fin]) { p.fin = map[p.fin]; changed = true; }
+    }
+    return changed;
   }
 
   /* ---------- Helpers ---------- */
@@ -333,29 +369,29 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var d = new Date(); d.setHours(19, 30, 0, 0);
     var base = d.getTime();
     var rows = [
-      [1, 'PNR', 'Roll man', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
-      [1, '1-on-1', 'Drive right', 'L side', null, '2', null, '3', null, '3', [3]],
-      [1, 'Transition', 'Run-out', null, null, '2', null, '7', null, '7', []],
-      [1, 'PNR', 'Pull-up', 'Middle', 'Switch', 'Miss', null, '3', '11', '3', []],
+      [1, 'PNR', 'Roll Finish', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
+      [1, '1-on-1', 'Drive Finish', 'L side', null, '2', null, '3', null, '3', [3]],
+      [1, 'Transition', 'Run Out', null, null, '2', null, '7', null, '7', []],
+      [1, 'PNR', 'Jumper', 'Middle', 'Switch', 'Miss', null, '3', '11', '3', []],
       [1, 'Post up', 'Middle hook', null, null, '2', null, '23', null, '23', [4]],
-      [1, 'PNR', 'Pass out', 'R slot', 'Drop', '3', null, '3', '11', '14', [2]],
+      [1, 'PNR', 'Drive and Kick', 'R slot', 'Drop', '3', null, '3', '11', '14', [2]],
       [1, 'Off. rebound', 'Put back', null, null, '2', null, '11', null, '11', [1]],
-      [1, 'Transition', 'Early 1-on-1', null, null, '2', null, '7', null, '7', []],
-      [1, '1-on-1', 'Drive left', null, null, 'FTs', 2, '14', null, '14', [3]],
+      [1, 'Transition', 'One on One', null, null, '2', null, '7', null, '7', []],
+      [1, '1-on-1', 'Drive and Kick', null, null, 'FTs', 2, '14', null, '14', [3]],
       [1, 'Out of bounds', 'SLOB', null, null, '2', null, null, null, '21', []],
-      [1, '1-on-1', 'Pull-up', null, null, 'Miss', null, '14', null, '14', []],
-      [2, 'PNR', 'Drive middle', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]],
+      [1, '1-on-1', 'Pull Up', null, null, 'Miss', null, '14', null, '14', []],
+      [2, 'PNR', 'Drive', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]],
       [2, 'Post up', 'Baseline turn', null, null, '2', null, '23', null, '23', [4]],
       [2, 'Off. rebound', 'Put back', null, null, '2', null, '11', null, '11', [1]],
-      [2, 'Transition', 'Off our TO', null, null, '2+1', null, '7', null, '7', [2]],
-      [2, 'Transition', 'Run-out', null, null, '2', null, '7', null, '7', []],
-      [2, 'Transition', 'Off our TO', null, null, '2+1', null, '5', null, '5', [2]],
-      [2, 'PNR', 'Roll man', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
+      [2, 'Transition', 'Turnover', null, null, '2+1', null, '7', null, '7', [2]],
+      [2, 'Transition', 'Run Out', null, null, '2', null, '7', null, '7', []],
+      [2, 'Transition', 'Turnover', null, null, '2+1', null, '5', null, '5', [2]],
+      [2, 'PNR', 'Roll Finish', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
       [2, 'Spot up', 'Catch & shoot', null, null, 'Miss', null, null, null, '32', []],
-      [2, '1-on-1', 'Pull-up', null, null, '2', null, '3', null, '3', []],
+      [2, '1-on-1', 'Pull Up', null, null, '2', null, '3', null, '3', []],
       [2, 'Off. rebound', 'Kick out', null, null, '3', null, '11', null, '7', [1]],
-      [2, 'PNR', 'Pull-up', 'L side', 'Ice', 'TO', null, '3', '11', null, []],
-      [2, 'PNR', 'Pull-up', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]]
+      [2, 'PNR', 'Jumper', 'L side', 'Ice', 'TO', null, '3', '11', null, []],
+      [2, 'PNR', 'Jumper', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]]
     ];
     var g = { id: 'sample', sample: true, opp: 'Example opponent', date: todayISO(), venue: 'Home',
       roster: ['0', '3', '5', '7', '11', '14', '21', '23', '32'], curQ: 'Q2', marks: { Q1: base, Q2: base + 14 * 60000 }, poss: [], created: Date.now() };
@@ -373,8 +409,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
   /* ---------- App state ---------- */
   var S = {
-    view: 'home', gameId: null, tab: 'log', sumQ: 'All',
+    view: 'home', gameId: null, tab: 'quick', sumQ: 'All',
     f: blankForm(), role: 'creator', editId: null,
+    q: { src: null, fin: null }, listFilter: 'all',
     confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' },
     lvLink: '', lvTEdit: false,
     rosterEdit: false, rosterDraft: ''
@@ -457,13 +494,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var g = G();
     var pts = gamePts(g);
     var tabsHTML = '<nav class="tabs" aria-label="Screens">' +
-      tabBtn('log', 'Log') + tabBtn('list', 'Possessions (' + g.poss.length + ')') + tabBtn('sum', 'Summary') + tabBtn('live', 'Live') + '</nav>';
+      tabBtn('quick', 'Game day') + tabBtn('log', 'Post game') + tabBtn('list', 'Possessions (' + g.poss.length + ')') + tabBtn('sum', 'Summary') + tabBtn('live', 'Live') + '</nav>';
     var qBtns = '';
     for (var i = 0; i < QUARTERS.length; i++) {
       qBtns += '<button type="button" class="' + (g.curQ === QUARTERS[i] ? 'on' : '') + '" data-a="setQ" data-v="' + QUARTERS[i] + '">' + QUARTERS[i] + '</button>';
     }
     var mark = g.marks && g.marks[g.curQ];
-    var body = S.tab === 'list' ? listHTML(g) : S.tab === 'sum' ? sumHTML(g) : S.tab === 'live' ? liveHTML(g) : logHTML(g);
+    var body = S.tab === 'list' ? listHTML(g) : S.tab === 'sum' ? sumHTML(g) : S.tab === 'live' ? liveHTML(g) : S.tab === 'log' ? logHTML(g) : quickHTML(g);
 
     app.innerHTML =
       '<header class="top">' +
@@ -504,6 +541,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     } else {
       var fin = '';
       for (i = 0; i < sd.finishes.length; i++) fin += opt('fin', sd.finishes[i], sd.finishes[i]);
+      if (f.fin && sd.finishes.indexOf(f.fin) < 0) fin += opt('fin', f.fin, f.fin + ' (old)');
       var wh = '';
       for (i = 0; i < WHERE.length; i++) wh += opt('where', WHERE[i], WHERE[i]);
       col2 = '<div class="g2">' + fin + '</div>' +
@@ -556,15 +594,10 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     }
 
     var canLog = !!(f.src && f.res && (f.res !== 'FTs' || f.ft !== null));
-    var recent = '', ordered = g.poss.slice().sort(function (a, b) { return b.t - a.t; });
-    for (i = 0; i < 3; i++) {
-      var x = ordered[i];
-      if (!x) { recent += '<div class="rc" style="opacity:.4"><div class="t">–</div><div class="d">&nbsp;</div></div>'; continue; }
-      recent += '<div class="rc"><div class="t"><span class="dot" style="background:' + (srcDef(x.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(x.src + (x.fin ? ' › ' + x.fin : '') + (x.cov ? ' · ' + x.cov : '')) + '</div>' +
-        '<div class="d num">' + esc(x.q + ' ' + hms(x.t) + ' · ' + whoText(x) + resText(x) + (x.echoes.length ? ' · Echo ' + x.echoes.join(', ') : '')) + '</div></div>';
-    }
+    var editing = S.editId ? possById(g, S.editId) : null;
 
-    return (S.editId ? '<div class="edit-banner">Editing possession #' + esc(editN(g)) + '. Change anything, then Save changes.</div>' : '') +
+    return (editing ? '<div class="edit-banner">' + (editing.quick ? 'Adding detail to game-day possession #' : 'Editing possession #') + esc(editing.n) +
+        ' (' + esc(editing.src + (editing.fin ? ' › ' + editing.fin : '') + ' · ' + resText(editing)) + '). Change anything, then Save changes.</div>' : '') +
       '<div class="log-grid">' +
         '<section class="card stack" aria-label="What started it">' +
           '<div class="spread"><h2 class="h" style="font-size:21px">1 · Source</h2><span class="muted" style="font-size:13px">pts tonight</span></div>' +
@@ -587,11 +620,85 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
             '<button type="button" class="btn big" data-a="clear">' + (S.editId ? 'Cancel' : 'Clear') + '</button>' +
             '<button type="button" class="btn big primary" data-a="log"' + (canLog ? '' : ' disabled') + '>' + (S.editId ? 'Save changes' : 'Log possession') + '</button></div>' +
         '</section>' +
-      '</div>' +
-      '<section class="recent" aria-label="Last logged">' + recent +
-        '<button type="button" class="btn" data-a="undo"' + (g.poss.length ? '' : ' disabled') + ' style="border-radius:14px">Undo last</button></section>';
+      '</div>' + recentHTML(g);
   }
-  function editN(g) { for (var i = 0; i < g.poss.length; i++) if (g.poss[i].id === S.editId) return g.poss[i].n; return ''; }
+  function possById(g, id) { for (var i = 0; i < g.poss.length; i++) if (g.poss[i].id === id) return g.poss[i]; return null; }
+  function needDetail(g) { var n = 0; for (var i = 0; i < g.poss.length; i++) if (g.poss[i].quick) n++; return n; }
+
+  function recentHTML(g) {
+    var recent = '', ordered = g.poss.slice().sort(function (a, b) { return b.t - a.t; });
+    for (var i = 0; i < 3; i++) {
+      var x = ordered[i];
+      if (!x) { recent += '<div class="rc" style="opacity:.4"><div class="t">–</div><div class="d">&nbsp;</div></div>'; continue; }
+      recent += '<div class="rc"><div class="t"><span class="dot" style="background:' + (srcDef(x.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(x.src + (x.fin ? ' › ' + x.fin : '') + (x.cov ? ' · ' + x.cov : '')) + '</div>' +
+        '<div class="d num">' + esc(x.q + ' ' + hms(x.t) + ' · ' + whoText(x) + resText(x) + (x.echoes.length ? ' · Echo ' + x.echoes.join(', ') : '')) + '</div></div>';
+    }
+    return '<section class="recent" aria-label="Last logged">' + recent +
+      '<button type="button" class="btn" data-a="undo"' + (g.poss.length ? '' : ' disabled') + ' style="border-radius:14px">Undo last</button></section>';
+  }
+
+  /* Game day: just what happened. Source, optional finish, then one tap on the result logs it. */
+  function quickHTML(g) {
+    var q = S.q, sd = srcDef(q.src), i;
+    var srcBtns = '';
+    for (i = 0; i < SOURCES.length; i++) {
+      var s = SOURCES[i], on = q.src === s.id, p = srcPts(g, s.id);
+      srcBtns += '<button type="button" class="btn src ' + (on ? 'on' : '') + '" data-a="qsrc" data-v="' + esc(s.id) + '" aria-pressed="' + on + '">' +
+        '<span class="nm"><span class="dot" style="background:' + s.color + '"></span>' + esc(s.id) + '</span>' +
+        '<span class="sub"><span class="num">' + (p ? p + ' pts' : '–') + '</span><span class="early">' + (s.early ? 'EARLY' : '') + '</span></span></button>';
+    }
+
+    var fin;
+    if (!sd) fin = '<div class="empty">Pick the source first</div>';
+    else {
+      fin = '';
+      for (i = 0; i < sd.finishes.length; i++) {
+        var fon = q.fin === sd.finishes[i];
+        fin += '<button type="button" class="btn ' + (fon ? 'on' : '') + '" data-a="qfin" data-v="' + esc(sd.finishes[i]) + '" aria-pressed="' + fon + '">' + esc(sd.finishes[i]) + '</button>';
+      }
+      fin = '<div class="gd-fin">' + fin + '</div>';
+    }
+
+    var res = '';
+    for (i = 0; i < QUICK_RESULTS.length; i++) {
+      var r = QUICK_RESULTS[i];
+      res += '<button type="button" class="btn ' + (r.ft ? 'ft' : r.stop ? 'stop' : '') + '" data-a="qres" data-v="' + esc(r.v) + '"' + (sd ? '' : ' disabled') + '>' + esc(r.label) + '</button>';
+    }
+    var pick = sd ? '<b>' + esc(q.src + (q.fin ? ' › ' + q.fin : '')) + '</b> · tap the result to log it' : 'Tap a source, then the result';
+    var todo = needDetail(g);
+
+    return '<div class="gd-grid">' +
+        '<section class="card stack" aria-label="What started it">' +
+          '<div class="spread"><h2 class="h" style="font-size:21px">1 · Source</h2><span class="muted" style="font-size:13px">pts tonight</span></div>' +
+          '<div class="gd-src">' + srcBtns + '</div>' +
+        '</section>' +
+        '<section class="card stack" aria-label="How it ended">' +
+          '<div class="spread"><h2 class="h" style="font-size:21px">2 · Finish</h2><span class="muted" style="font-size:13px">optional</span></div>' + fin +
+        '</section>' +
+        '<section class="card stack" aria-label="Result">' +
+          '<h2 class="h" style="font-size:21px">3 · Result</h2>' +
+          '<div class="gd-pick">' + pick + '</div>' +
+          '<div class="gd-res">' + res + '</div>' +
+          (sd ? '<button type="button" class="btn ghost" data-a="qclear">Clear</button>' : '') +
+          '<p class="hint" style="margin:0">' + (todo ? todo + ' game-day ' + (todo === 1 ? 'possession' : 'possessions') + ' to add detail to after the game (Possessions › Needs detail).' : 'Spots, coverage, players and echoes get added after the game in Post game.') + '</p>' +
+        '</section>' +
+      '</div>' + recentHTML(g);
+  }
+
+  function quickLog(g, v) {
+    var q = S.q, sd = srcDef(q.src);
+    if (!sd) { toast('Pick the source first'); return; }
+    var res = v, ft = null;
+    if (v.indexOf('FTs:') === 0) { res = 'FTs'; ft = Number(v.slice(4)); }
+    var maxN = 0;
+    for (var j = 0; j < g.poss.length; j++) maxN = Math.max(maxN, g.poss[j].n);
+    var rec = { id: uid(), n: maxN + 1, q: g.curQ, t: Date.now(), src: q.src, fin: q.fin, where: null, cov: null, res: res, ft: ft,
+      pts: ptsFor(res, ft), creator: null, screener: null, scorer: null, echoes: [], early: !!sd.early, quick: true };
+    g.poss.push(rec);
+    saveGame(g);
+    S.q = { src: null, fin: null };
+    toast('Logged #' + rec.n + ': ' + rec.src + (rec.fin ? ' › ' + rec.fin : '') + ' · ' + resText(rec));
+  }
   function opt(key, val, label) {
     var on = S.f[key] === val;
     return '<button type="button" class="btn ' + (on ? 'on' : '') + '" data-a="opt" data-k="' + key + '" data-v="' + esc(val) + '" aria-pressed="' + on + '">' + esc(label) + '</button>';
@@ -605,20 +712,27 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
 
   function listHTML(g) {
-    var rows = '', ps = g.poss.slice().sort(function (a, b) { return b.t - a.t; });
+    var todo = needDetail(g);
+    if (!todo) S.listFilter = 'all';
+    var onlyTodo = S.listFilter === 'quick';
+    var rows = '', ps = g.poss.slice().sort(function (a, b) { return onlyTodo ? a.t - b.t : b.t - a.t; });
     for (var i = 0; i < ps.length; i++) {
       var p = ps[i], dk = 'del:' + p.id;
+      if (onlyTodo && !p.quick) continue;
       rows += '<tr><td class="num">' + p.n + '</td><td>' + p.q + '</td><td class="num muted">' + hms(p.t) + '</td>' +
-        '<td><span class="dot" style="background:' + (srcDef(p.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(p.src) + (p.fin ? ' › ' + esc(p.fin) : '') + (p.early ? ' <span class="tag">EARLY</span>' : '') + '</td>' +
+        '<td><span class="dot" style="background:' + (srcDef(p.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(p.src) + (p.fin ? ' › ' + esc(p.fin) : '') + (p.early ? ' <span class="tag">EARLY</span>' : '') + (p.quick ? ' <span class="tag todo">GAME DAY</span>' : '') + '</td>' +
         '<td class="muted">' + esc([p.where, p.cov].filter(Boolean).join(' · ')) + '</td>' +
         '<td class="num">' + esc(whoText(p).replace(/ · $/, '')) + '</td>' +
         '<td>' + esc(resText(p)) + '</td><td class="num">' + esc(p.echoes.join(', ')) + '</td>' +
-        '<td class="r" style="white-space:nowrap"><button type="button" class="btn" data-a="edit" data-v="' + p.id + '" style="min-height:40px">Edit</button> ' +
+        '<td class="r" style="white-space:nowrap"><button type="button" class="btn' + (p.quick ? ' primary' : '') + '" data-a="edit" data-v="' + p.id + '" style="min-height:40px">' + (p.quick ? 'Add detail' : 'Edit') + '</button> ' +
         '<button type="button" class="btn ' + (S.confirm === dk ? 'warn' : 'ghost') + '" data-a="del" data-v="' + p.id + '" style="min-height:40px">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button></td></tr>';
     }
     if (!rows) rows = '<tr><td colspan="9"><div class="empty">Nothing logged yet.</div></td></tr>';
+    var filt = todo ? '<div class="seg" role="group" aria-label="Show">' +
+        '<button type="button" class="' + (onlyTodo ? '' : 'on') + '" data-a="listFilter" data-v="all">All</button>' +
+        '<button type="button" class="' + (onlyTodo ? 'on' : '') + '" data-a="listFilter" data-v="quick">Needs detail (' + todo + ')</button></div>' : '';
     return '<section class="card stack" aria-label="All possessions">' +
-      '<div class="spread" style="flex-wrap:wrap"><h2 class="h" style="font-size:21px">All possessions</h2>' +
+      '<div class="spread" style="flex-wrap:wrap"><div class="row"><h2 class="h" style="font-size:21px;margin-right:6px">' + (onlyTodo ? 'Needs detail' : 'All possessions') + '</h2>' + filt + '</div>' +
         '<div class="gbtns"><button type="button" class="btn" data-a="exportCSV">Export CSV</button><button type="button" class="btn" data-a="exportJSON" data-v="' + g.id + '">Backup file</button><button type="button" class="btn" data-a="copyCSV">Copy CSV</button></div></div>' +
       '<div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Q</th><th>Logged</th><th>Source › finish</th><th>Where · cov</th><th>Players</th><th>Result</th><th>Echo</th><th class="r"></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
       '</section>';
@@ -702,13 +816,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
   /* ---------- Export / import ---------- */
   function csvFor(g) {
-    var head = ['opponent', 'date', 'venue', 'n', 'quarter', 'logged_at', 'secs_since_q_start', 'source', 'finish', 'where', 'coverage', 'result', 'ft_made', 'points', 'creator', 'screener', 'shooter', 'echoes', 'early'];
+    var head = ['opponent', 'date', 'venue', 'n', 'quarter', 'logged_at', 'secs_since_q_start', 'source', 'finish', 'where', 'coverage', 'result', 'ft_made', 'points', 'creator', 'screener', 'shooter', 'echoes', 'early', 'needs_detail'];
     var lines = [head.join(',')];
     var ps = g.poss.slice().sort(function (a, b) { return a.t - b.t; });
     for (var i = 0; i < ps.length; i++) {
       var p = ps[i], m = g.marks && g.marks[p.q];
       var row = [g.opp, g.date, g.venue, p.n, p.q, new Date(p.t).toISOString(), m ? Math.round((p.t - m) / 1000) : '',
-        p.src, p.fin || '', p.where || '', p.cov || '', p.res, p.ft == null ? '' : p.ft, p.pts, p.creator || '', p.screener || '', p.scorer || '', p.echoes.join(' '), p.early ? 'yes' : 'no'];
+        p.src, p.fin || '', p.where || '', p.cov || '', p.res, p.ft == null ? '' : p.ft, p.pts, p.creator || '', p.screener || '', p.scorer || '', p.echoes.join(' '), p.early ? 'yes' : 'no', p.quick ? 'yes' : 'no'];
       lines.push(row.map(function (c) { c = String(c); return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','));
     }
     return lines.join('\n');
@@ -1223,8 +1337,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var g = G(), f = S.f;
     if (a.indexOf('lv') === 0) { if (g && lvAct(a, v, g)) render(); return; }
     switch (a) {
-      case 'open': S.gameId = v; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
-      case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); break;
+      case 'open': S.gameId = v; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null }; S.listFilter = 'all'; S.f = blankForm(); S.editId = null; S.role = 'creator'; S.rosterEdit = false; wake(); break;
+      case 'home': S.view = 'home'; S.editId = null; S.f = blankForm(); S.q = { src: null, fin: null }; break;
       case 'ngVenue': S.newGame.venue = v; break;
       case 'startGame':
         var opp = S.newGame.opp.replace(/^\s+|\s+$/g, '');
@@ -1233,7 +1347,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           curQ: 'Q1', marks: {}, poss: [], calls: [], ls: lvParseId(S.newGame.ls), created: Date.now() };
         saveGame(ng);
         S.newGame = { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' };
-        S.gameId = ng.id; S.view = 'game'; S.tab = 'log'; S.f = blankForm(); S.role = 'creator';
+        S.gameId = ng.id; S.view = 'game'; S.tab = 'quick'; S.q = { src: null, fin: null }; S.listFilter = 'all'; S.f = blankForm(); S.role = 'creator';
         wake();
         break;
       case 'delGame':
@@ -1241,6 +1355,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         else { armConfirm('delgame:' + v); }
         break;
       case 'tab': S.tab = v; S.confirm = null; break;
+      case 'qsrc': S.q = S.q.src === v ? { src: null, fin: null } : { src: v, fin: null }; break;
+      case 'qfin': S.q.fin = S.q.fin === v ? null : v; break;
+      case 'qres': quickLog(g, v); break;
+      case 'qclear': S.q = { src: null, fin: null }; break;
+      case 'listFilter': S.listFilter = v; S.confirm = null; break;
       case 'setQ': g.curQ = v; saveGame(g); break;
       case 'markQ': g.marks = g.marks || {}; g.marks[g.curQ] = Date.now(); saveGame(g); toast('Start of ' + g.curQ + ' marked'); break;
       case 'src':

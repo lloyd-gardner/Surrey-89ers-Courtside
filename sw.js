@@ -1,6 +1,6 @@
 // Keeps the app on the iPad so it opens with no internet.
 // Bump VERSION in build.py when you change the app; the iPad picks it up next time it's online.
-var CACHE = 'courtside-v2';
+var CACHE = 'courtside-v4';
 var FILES = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {
