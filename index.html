@@ -49,7 +49,6 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
 .btn{min-height:44px;border:1px solid var(--line);background:var(--raised);color:var(--ink);border-radius:12px;font-weight:600;font-size:15px;padding:0 12px;line-height:1.15}
 .btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.btn.echo.on{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
 .btn.ghost{background:transparent}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.warn{background:#3A1E14;border-color:#8A3B22;color:#FFD9CC}
@@ -99,7 +98,6 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .rc{background:var(--surface);border:1px solid var(--line-soft);border-radius:14px;padding:9px 12px;min-width:0}
 .rc .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rc .d{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.echo-txt{font-size:12px;color:var(--muted);min-height:16px}
 .edit-banner{background:#2A2413;border:1px solid #6B5320;color:#FBE6BD;border-radius:12px;padding:8px 12px;margin-bottom:10px}
 .sample-banner{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:14px}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:12px;font-weight:600;max-width:90%;z-index:10}
@@ -121,6 +119,16 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .gd-pick{font-size:14px;color:var(--muted);min-height:20px}
 .gd-pick b{color:var(--ink)}
 .tag.todo{background:#2A2413;color:#F2C46A;border-color:#6B5320}
+
+/* summary drill-down */
+.sx{display:inline-flex;align-items:center;min-height:40px;border:0;background:none;padding:0;font-weight:600;font-size:14px;color:var(--ink)}
+.sx .chev{display:inline-block;width:16px;color:var(--muted);font-size:18px;transition:transform .15s}
+.sx-row.open .chev{transform:rotate(90deg)}
+.sx-row.open td{border-bottom-color:transparent}
+.sx-sub td{background:var(--raised);font-size:13px;padding-top:5px;padding-bottom:5px}
+.sx-sub .fin-nm{padding-left:24px}
+.bar.thin{height:7px}
+.jersey .pn{display:block;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:0;line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px;opacity:.8}
 
 /* list + tables */
 .tbl{width:100%;border-collapse:collapse;font-size:14px}
@@ -261,8 +269,6 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     { id: 'Miss', label: 'Miss', pts: 0, span: 's4' },
     { id: 'TO', label: 'Turnover', pts: 0, span: 's4' }
   ];
-  var ECHOES = ['Make contact in tagging up', 'Contest every shot', 'Guard your man without help for two dribbles',
-    'Win the physicality battle', "Don't get screened", 'Apply our defensive pressure points'];
   var QUARTERS = ['Q1', 'Q2', 'Q3', 'Q4', 'OT'];
   // Game day results: one tap logs the possession. FTs carry the number made after the colon.
   var QUICK_RESULTS = [
@@ -414,7 +420,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   var S = {
     view: 'home', gameId: null, tab: 'quick', sumQ: 'All',
     f: blankForm(), role: 'creator', editId: null,
-    q: { src: null, fin: null, cov: null }, listFilter: 'all',
+    q: { src: null, fin: null, cov: null }, listFilter: 'all', sumOpen: {},
     confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' },
     lvLink: '', lvTEdit: false,
     rosterEdit: false, rosterDraft: ''
@@ -480,7 +486,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
             '<button type="button" class="btn ' + (ng.venue === 'Home' ? 'on' : '') + '" data-a="ngVenue" data-v="Home">Home</button>' +
             '<button type="button" class="btn ' + (ng.venue === 'Away' ? 'on' : '') + '" data-a="ngVenue" data-v="Away">Away</button></div></div></div>' +
           '<div class="field"><label class="lbl" for="ng-roster">Their jersey numbers</label><input id="ng-roster" type="text" inputmode="numeric" autocomplete="off" data-ng="roster" value="' + esc(ng.roster) + '" placeholder="e.g. 0 3 5 7 11 14 21 23 32"></div>' +
-          '<p class="hint" style="margin:0">Separate numbers with spaces. You can edit the roster during the game.</p>' +
+          '<p class="hint" style="margin:0">Separate numbers with spaces. If you add the LiveStats link below you can leave this blank: numbers and names fill in from LiveStats.</p>' +
           '<div class="field"><label class="lbl" for="ng-ls">LiveStats link <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional, for the Live tab)</span></label><input id="ng-ls" type="text" inputmode="url" autocomplete="off" data-ng="ls" value="' + esc(ng.ls) + '" placeholder="Paste the game\'s LiveStats link"></div>' +
           '<button type="button" class="btn big primary" data-a="startGame">Start logging</button>' +
         '</section>' +
@@ -582,19 +588,14 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var roster = g.roster.concat(['?']);
     for (i = 0; i < roster.length; i++) {
       var n = roster[i], isSel = f[S.role] === n;
-      jBtns += '<button type="button" class="btn jersey ' + (isSel ? 'on' : '') + '" data-a="num" data-v="' + esc(n) + '" aria-label="' + (n === '?' ? 'Unknown player' : 'Number ' + esc(n)) + '">' + (n === '?' ? '?' : esc(n)) + '</button>';
+      var sn = n === '?' ? '' : pName(g, n, true);
+      jBtns += '<button type="button" class="btn jersey ' + (isSel ? 'on' : '') + '" data-a="num" data-v="' + esc(n) + '" aria-label="' + (n === '?' ? 'Unknown player' : 'Number ' + esc(n) + (sn ? ' ' + esc(sn) : '')) + '">' + (n === '?' ? '?' : esc(n)) + (sn ? '<span class="pn">' + esc(sn) + '</span>' : '') + '</button>';
     }
     var rosterBlock = S.rosterEdit
       ? '<div class="field"><label class="lbl" for="roster-edit">Their jersey numbers</label><input id="roster-edit" type="text" inputmode="numeric" data-roster="1" value="' + esc(S.rosterDraft) + '"></div>' +
+        '<p class="hint" style="margin:0">' + (g.ls ? 'Saving a change here stops LiveStats replacing these numbers; it will still add any it has that are missing.' : 'Add the LiveStats link on the Live tab and the numbers and names fill in by themselves.') + '</p>' +
         '<div class="g2"><button type="button" class="btn" data-a="rosterCancel">Cancel</button><button type="button" class="btn primary" data-a="rosterSave">Save roster</button></div>'
       : '<div class="g6">' + jBtns + '</div>';
-
-    var ech = '', names = [];
-    for (i = 0; i < ECHOES.length; i++) {
-      var id = String(i + 1), eon = f.echoes.indexOf(id) >= 0;
-      if (eon) names.push(id + ' · ' + ECHOES[i]);
-      ech += '<button type="button" class="btn echo jersey ' + (eon ? 'on' : '') + '" data-a="echo" data-v="' + id + '" aria-pressed="' + eon + '" aria-label="Echo ' + id + ': ' + esc(ECHOES[i]) + '">' + id + '</button>';
-    }
 
     var canLog = !!(f.src && f.res && (f.res !== 'FTs' || f.ft !== null));
     var editing = S.editId ? possById(g, S.editId) : null;
@@ -623,8 +624,6 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           '<div class="spread"><span class="lbl">Tap role, then number</span>' +
             (S.rosterEdit ? '' : '<button type="button" class="btn ghost" data-a="rosterEdit" style="min-height:36px;font-size:13px">Edit roster</button>') + '</div>' +
           '<div class="roles">' + roleBtns + '</div>' + rosterBlock +
-          '<div class="stack" style="grid-gap:6px;gap:6px"><div class="spread"><span class="lbl">Echo broken?</span><span class="muted" style="font-size:12px">optional</span></div>' +
-            '<div class="g6">' + ech + '</div><div class="echo-txt">' + esc(names.length ? names.join('   ') : 'Tap any echo that broke on this possession') + '</div></div>' +
           '<div class="g2" style="grid-template-columns:minmax(0,1fr) minmax(0,2.2fr)">' +
             '<button type="button" class="btn big" data-a="clear">' + (S.editId ? 'Cancel' : 'Clear') + '</button>' +
             '<button type="button" class="btn big primary" data-a="log"' + (canLog ? '' : ' disabled') + '>' + (S.editId ? 'Save changes' : 'Log possession') + '</button></div>' +
@@ -647,7 +646,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
   function openEdit(g, id) {
     var p = possById(g, id); if (!p) return;
-    S.f = { src: p.src, fin: p.fin, where: p.where, cov: p.cov, res: p.res, ft: p.ft, creator: p.creator, screener: p.screener, scorer: p.scorer, echoes: p.echoes.slice() };
+    S.f = { src: p.src, fin: p.fin, where: p.where, cov: p.cov, res: p.res, ft: p.ft, creator: p.creator, screener: p.screener, scorer: p.scorer, echoes: (p.echoes || []).slice() };
     S.editId = p.id; S.tab = 'log'; S.role = 'creator'; S.confirm = null;
     try { window.scrollTo(0, 0); } catch (e) {}
   }
@@ -660,7 +659,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       var x = ordered[i];
       if (!x) { recent += '<div class="rc" style="opacity:.4"><div class="t">–</div><div class="d">&nbsp;</div></div>'; continue; }
       recent += '<div class="rc"><div class="t"><span class="dot" style="background:' + (srcDef(x.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(x.src + (x.fin ? ' › ' + x.fin : '') + (x.cov ? ' · ' + x.cov : '')) + '</div>' +
-        '<div class="d num">' + esc(x.q + ' ' + hms(x.t) + ' · ' + whoText(x) + resText(x) + (x.echoes.length ? ' · Echo ' + x.echoes.join(', ') : '')) + '</div></div>';
+        '<div class="d num">' + esc(x.q + ' ' + hms(x.t) + ' · ' + whoText(x) + resText(x)) + '</div></div>';
     }
     return '<section class="recent" aria-label="Last logged">' + recent +
       '<button type="button" class="btn" data-a="undo"' + (g.poss.length ? '' : ' disabled') + ' style="border-radius:14px">Undo last</button></section>';
@@ -717,7 +716,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           '<div class="gd-pick">' + pick + '</div>' +
           '<div class="gd-res">' + res + '</div>' +
           (sd ? '<button type="button" class="btn ghost" data-a="qclear">Clear</button>' : '') +
-          '<p class="hint" style="margin:0">' + (todo ? todo + ' game-day ' + (todo === 1 ? 'possession' : 'possessions') + ' to add detail to after the game (Possessions › Needs detail).' : 'Spots, players and echoes get added after the game in Post game.') + '</p>' +
+          '<p class="hint" style="margin:0">' + (todo ? todo + ' game-day ' + (todo === 1 ? 'possession' : 'possessions') + ' to add detail to after the game (Possessions › Needs detail).' : 'Spots and players get added after the game in Post game.') + '</p>' +
         '</section>' +
       '</div>' + recentHTML(g);
   }
@@ -760,18 +759,18 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         '<td><span class="dot" style="background:' + (srcDef(p.src) || { color: OTHER }).color + ';margin-right:8px"></span>' + esc(p.src) + (p.fin ? ' › ' + esc(p.fin) : '') + (p.early ? ' <span class="tag">EARLY</span>' : '') + (p.quick ? ' <span class="tag todo">GAME DAY</span>' : '') + '</td>' +
         '<td class="muted">' + esc([p.where, p.cov].filter(Boolean).join(' · ')) + '</td>' +
         '<td class="num">' + esc(whoText(p).replace(/ · $/, '')) + '</td>' +
-        '<td>' + esc(resText(p)) + '</td><td class="num">' + esc(p.echoes.join(', ')) + '</td>' +
+        '<td>' + esc(resText(p)) + '</td>' +
         '<td class="r" style="white-space:nowrap"><button type="button" class="btn' + (p.quick ? ' primary' : '') + '" data-a="edit" data-v="' + p.id + '" style="min-height:40px">' + (p.quick ? 'Add detail' : 'Edit') + '</button> ' +
         '<button type="button" class="btn ' + (S.confirm === dk ? 'warn' : 'ghost') + '" data-a="del" data-v="' + p.id + '" style="min-height:40px">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button></td></tr>';
     }
-    if (!rows) rows = '<tr><td colspan="9"><div class="empty">Nothing logged yet.</div></td></tr>';
+    if (!rows) rows = '<tr><td colspan="8"><div class="empty">Nothing logged yet.</div></td></tr>';
     var filt = todo ? '<div class="seg" role="group" aria-label="Show">' +
         '<button type="button" class="' + (onlyTodo ? '' : 'on') + '" data-a="listFilter" data-v="all">All</button>' +
         '<button type="button" class="' + (onlyTodo ? 'on' : '') + '" data-a="listFilter" data-v="quick">Needs detail (' + todo + ')</button></div>' : '';
     return '<section class="card stack" aria-label="All possessions">' +
       '<div class="spread" style="flex-wrap:wrap"><div class="row"><h2 class="h" style="font-size:21px;margin-right:6px">' + (onlyTodo ? 'Needs detail' : 'All possessions') + '</h2>' + filt + '</div>' +
         '<div class="gbtns"><button type="button" class="btn" data-a="exportCSV">Export CSV</button><button type="button" class="btn" data-a="exportJSON" data-v="' + g.id + '">Backup file</button><button type="button" class="btn" data-a="copyCSV">Copy CSV</button></div></div>' +
-      '<div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Q</th><th>Logged</th><th>Source › finish</th><th>Where · cov</th><th>Players</th><th>Result</th><th>Echo</th><th class="r"></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Q</th><th>Logged</th><th>Source › finish</th><th>Where · cov</th><th>Players</th><th>Result</th><th class="r"></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
       '</section>';
   }
 
@@ -781,13 +780,14 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var qb = '', qs = ['All'].concat(QUARTERS);
     for (i = 0; i < qs.length; i++) qb += '<button type="button" class="' + (S.sumQ === qs[i] ? 'on' : '') + '" data-a="sumQ" data-v="' + qs[i] + '">' + qs[i] + '</button>';
 
-    var tot = 0, early = 0, tos = 0, bySrc = {}, cov = {}, ech = {}, pl = {};
+    var tot = 0, early = 0, tos = 0, bySrc = {}, cov = {}, pl = {};
+    function add(o, key, pts) { (o[key] = o[key] || { pts: 0, poss: 0 }); o[key].pts += pts; o[key].poss++; }
     for (i = 0; i < ps.length; i++) {
       var p = ps[i];
       tot += p.pts; if (p.early) early += p.pts; if (p.res === 'TO') tos++;
-      (bySrc[p.src] = bySrc[p.src] || { pts: 0, poss: 0 }); bySrc[p.src].pts += p.pts; bySrc[p.src].poss++;
-      if (p.cov) { var ck = p.src + ' · ' + p.cov; (cov[ck] = cov[ck] || { pts: 0, poss: 0 }); cov[ck].pts += p.pts; cov[ck].poss++; }
-      for (k = 0; k < p.echoes.length; k++) { var e = p.echoes[k]; (ech[e] = ech[e] || { n: 0, pts: 0 }); ech[e].n++; ech[e].pts += p.pts; }
+      add(bySrc, p.src, p.pts);
+      var bs = bySrc[p.src]; bs.fin = bs.fin || {}; add(bs.fin, p.fin || '', p.pts);
+      if (p.cov) add(cov, p.src + ' · ' + p.cov, p.pts);
       var inv = [];
       if (p.creator && p.creator !== '?') inv.push(p.creator);
       if (p.scorer && p.scorer !== '?' && inv.indexOf(p.scorer) < 0) inv.push(p.scorer);
@@ -800,14 +800,29 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     }
     var n = ps.length;
     function ppp(a, b) { return b ? (a / b).toFixed(2) : '–'; }
+    function byPts(o) { return function (a, b) { return o[b].pts - o[a].pts || o[b].poss - o[a].poss; }; }
 
-    var srcRows = '', keys = Object.keys(bySrc).sort(function (a, b) { return bySrc[b].pts - bySrc[a].pts || bySrc[b].poss - bySrc[a].poss; });
+    var srcRows = '', keys = Object.keys(bySrc).sort(byPts(bySrc));
     var maxPts = 1; for (i = 0; i < keys.length; i++) maxPts = Math.max(maxPts, bySrc[keys[i]].pts);
+    var allOpen = keys.length > 0;
     for (i = 0; i < keys.length; i++) {
-      var b = bySrc[keys[i]], col = (srcDef(keys[i]) || { color: OTHER }).color;
-      srcRows += '<tr><td style="white-space:nowrap;font-weight:600"><span class="dot" style="background:' + col + ';margin-right:8px"></span>' + esc(keys[i]) + '</td>' +
+      var key = keys[i], b = bySrc[key], col = (srcDef(key) || { color: OTHER }).color, open = !!S.sumOpen[key];
+      if (!open) allOpen = false;
+      srcRows += '<tr class="sx-row' + (open ? ' open' : '') + '"><td style="white-space:nowrap"><button type="button" class="sx" data-a="sumSrc" data-v="' + esc(key) + '" aria-expanded="' + open + '">' +
+          '<span class="chev" aria-hidden="true">›</span><span class="dot" style="background:' + col + ';margin-right:8px"></span>' + esc(key) + '</button></td>' +
         '<td style="width:40%"><div class="bar"><span style="width:' + Math.round(b.pts / maxPts * 100) + '%;background:' + col + '"></span></div></td>' +
         '<td class="r num" style="font-weight:600">' + b.pts + '</td><td class="r num muted">' + b.poss + '</td><td class="r num" style="font-weight:600">' + ppp(b.pts, b.poss) + '</td></tr>';
+      if (open) {
+        var fk = Object.keys(b.fin).sort(byPts(b.fin)), fmax = 1;
+        for (k = 0; k < fk.length; k++) fmax = Math.max(fmax, b.fin[fk[k]].pts);
+        for (k = 0; k < fk.length; k++) {
+          var fb = b.fin[fk[k]];
+          srcRows += '<tr class="sx-sub"><td><span class="fin-nm' + (fk[k] ? '' : ' muted') + '">' + esc(fk[k] || 'No finish logged') + '</span>' +
+              '<span class="muted num" style="font-size:12px;margin-left:6px">' + (b.pts ? Math.round(fb.pts / b.pts * 100) + '%' : '') + '</span></td>' +
+            '<td><div class="bar thin"><span style="width:' + Math.round(fb.pts / fmax * 100) + '%;background:' + col + ';opacity:.65"></span></div></td>' +
+            '<td class="r num">' + fb.pts + '</td><td class="r num muted">' + fb.poss + '</td><td class="r num">' + ppp(fb.pts, fb.poss) + '</td></tr>';
+        }
+      }
     }
     if (!srcRows) srcRows = '<tr><td colspan="5" class="muted">Nothing logged for this period.</td></tr>';
 
@@ -815,16 +830,12 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     for (i = 0; i < ckeys.length; i++) covRows += '<tr><td>' + esc(ckeys[i]) + '</td><td class="r num">' + cov[ckeys[i]].pts + '</td><td class="r num muted">' + cov[ckeys[i]].poss + '</td><td class="r num" style="font-weight:600">' + ppp(cov[ckeys[i]].pts, cov[ckeys[i]].poss) + '</td></tr>';
     if (!covRows) covRows = '<tr><td colspan="4" class="muted">No coverages logged yet.</td></tr>';
 
-    var echRows = '';
-    for (i = 0; i < ECHOES.length; i++) {
-      var id = String(i + 1), ev = ech[id] || { n: 0, pts: 0 };
-      echRows += '<tr><td class="num" style="font-weight:700">' + id + '</td><td>' + esc(ECHOES[i]) + '</td><td class="r num" style="font-weight:600">' + ev.n + '</td><td class="r num muted">' + ev.pts + '</td></tr>';
-    }
-
     var plRows = '', pkeys = Object.keys(pl).sort(function (a, b) { return pl[b].involved - pl[a].involved; });
-    for (i = 0; i < pkeys.length && i < 8; i++) {
-      var pp = pl[pkeys[i]];
-      plRows += '<tr><td style="font-family:var(--display);font-weight:700;font-size:18px">#' + esc(pkeys[i]) + '</td><td class="r num" style="font-weight:600">' + pp.involved + '</td><td class="r num muted">' + pp.created + '</td><td class="r num muted">' + pp.scored + '</td></tr>';
+    for (i = 0; i < pkeys.length && i < 10; i++) {
+      var pp = pl[pkeys[i]], nm = pName(g, pkeys[i]);
+      plRows += '<tr><td style="white-space:nowrap"><span style="font-family:var(--display);font-weight:700;font-size:18px">#' + esc(pkeys[i]) + '</span>' +
+          (nm ? '<span style="margin-left:8px;font-weight:600">' + esc(nm) + '</span>' : '') + '</td>' +
+        '<td class="r num" style="font-weight:600">' + pp.involved + '</td><td class="r num muted">' + pp.created + '</td><td class="r num muted">' + pp.scored + '</td></tr>';
     }
     if (!plRows) plRows = '<tr><td colspan="4" class="muted">No players logged yet.</td></tr>';
 
@@ -836,14 +847,14 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         kpi(tos, 'turnovers forced', 'logged as Turnover') +
       '</div>' +
       '<div class="sum-grid">' +
+        '<section class="card"><div class="spread" style="margin-bottom:6px"><h2 class="h" style="font-size:21px">How they\'re scoring</h2>' +
+            (keys.length ? '<button type="button" class="btn ghost" data-a="sumAll" data-v="' + (allOpen ? '0' : '1') + '" style="min-height:36px;font-size:13px">' + (allOpen ? 'Hide finishes' : 'Show all finishes') + '</button>' : '') + '</div>' +
+          '<div class="scroll-x"><table class="tbl"><thead><tr><th>Source › finish</th><th>Points</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + srcRows + '</tbody></table></div>' +
+          '<p class="hint" style="margin:8px 0 0">Tap a source to see which finishes the points came from.</p></section>' +
         '<div class="stack" style="grid-gap:12px;gap:12px">' +
-          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">How they\'re scoring</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Source</th><th>Points</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + srcRows + '</tbody></table></div></section>' +
-          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Screen coverages</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Action · coverage</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + covRows + '</tbody></table></div></section>' +
-        '</div>' +
-        '<div class="stack" style="grid-gap:12px;gap:12px">' +
-          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Echoes broken</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>#</th><th>Echo</th><th class="r">Times</th><th class="r">Pts</th></tr></thead><tbody>' + echRows + '</tbody></table></div></section>' +
           '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Who\'s hurting us</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Player</th><th class="r">Involved</th><th class="r">Created</th><th class="r">Scored</th></tr></thead><tbody>' + plRows + '</tbody></table></div>' +
           '<p class="hint" style="margin:8px 0 0">Involved counts points a player created or scored, once per possession.</p></section>' +
+          '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Screen coverages</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Action · coverage</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + covRows + '</tbody></table></div></section>' +
         '</div>' +
       '</div>';
   }
@@ -853,13 +864,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
   /* ---------- Export / import ---------- */
   function csvFor(g) {
-    var head = ['opponent', 'date', 'venue', 'n', 'quarter', 'logged_at', 'secs_since_q_start', 'source', 'finish', 'where', 'coverage', 'result', 'ft_made', 'points', 'creator', 'screener', 'shooter', 'echoes', 'early', 'needs_detail'];
+    var head = ['opponent', 'date', 'venue', 'n', 'quarter', 'logged_at', 'secs_since_q_start', 'source', 'finish', 'where', 'coverage', 'result', 'ft_made', 'points', 'creator', 'creator_name', 'screener', 'screener_name', 'shooter', 'shooter_name', 'early', 'needs_detail'];
     var lines = [head.join(',')];
     var ps = g.poss.slice().sort(function (a, b) { return a.t - b.t; });
     for (var i = 0; i < ps.length; i++) {
       var p = ps[i], m = g.marks && g.marks[p.q];
       var row = [g.opp, g.date, g.venue, p.n, p.q, new Date(p.t).toISOString(), m ? Math.round((p.t - m) / 1000) : '',
-        p.src, p.fin || '', p.where || '', p.cov || '', p.res, p.ft == null ? '' : p.ft, p.pts, p.creator || '', p.screener || '', p.scorer || '', p.echoes.join(' '), p.early ? 'yes' : 'no', p.quick ? 'yes' : 'no'];
+        p.src, p.fin || '', p.where || '', p.cov || '', p.res, p.ft == null ? '' : p.ft, p.pts, p.creator || '', pName(g, p.creator), p.screener || '', pName(g, p.screener), p.scorer || '', pName(g, p.scorer), p.early ? 'yes' : 'no', p.quick ? 'yes' : 'no'];
       lines.push(row.map(function (c) { c = String(c); return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c; }).join(','));
     }
     return lines.join('\n');
@@ -969,7 +980,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
   function lvWe() {
     var d = LV.d;
-    if (d && /surrey/i.test(d.t1.name) && !/surrey/i.test(d.t2.name)) return '1';
+    if (d && /surrey|89ers/i.test(d.t1.name) && !/surrey|89ers/i.test(d.t2.name)) return '1';
     return '2';
   }
   function lvTeam(d, n) { return n === '1' ? d.t1 : d.t2; }
@@ -977,6 +988,34 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var d = LV.d;
     if (d) return lvTeam(d, lvWe(g) === '1' ? '2' : '1').code;
     return String(g.opp || 'OPP').toUpperCase();
+  }
+  /* Their roster and names from LiveStats. Names are kept with the game so they show offline later.
+     The roster follows LiveStats unless it has been edited by hand; then LiveStats only adds missing numbers. */
+  function lvRosterSync(gid) {
+    var g = games[gid], d = LV.d;
+    if (!g || !d) return;
+    var opp = lvTeam(d, lvWe() === '1' ? '2' : '1');
+    if (!opp || !opp.pl || !opp.pl.length) return;
+    var names = {}, nums = [];
+    for (var i = 0; i < opp.pl.length; i++) {
+      var r = opp.pl[i], no = String(r[0] == null ? '' : r[0]).replace(/[^0-9]/g, '');
+      if (!no || no.length > 2) continue;
+      names[no] = { n: r[1] || '', s: r[2] || r[1] || '' };
+      nums.push(no);
+    }
+    if (!nums.length) return;
+    var roster = g.rosterManual ? parseRoster(g.roster.concat(nums).join(' ')) : parseRoster(nums.join(' '));
+    if (JSON.stringify(names) === JSON.stringify(g.names || {}) && roster.join(' ') === g.roster.join(' ')) return;
+    g.names = names; g.roster = roster;
+    saveGame(g);
+    if (S.view === 'game' && S.gameId === gid && S.tab !== 'live' && !S.rosterEdit) {
+      var ae = document.activeElement;
+      if (!(ae && ae.tagName === 'INPUT')) render();
+    }
+  }
+  function pName(g, no, short) {
+    var x = no && g.names && g.names[no];
+    return x ? (short ? x.s : x.n) : '';
   }
   function lvBook(g) { var b = sget('books') || {}; return b[lvOppKey(g)] || []; }
   function lvAddToBook(g, call) {
@@ -1258,7 +1297,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       if (LV.gameId !== gid || LV.lsId !== id) return;
       var j = null;
       try { j = JSON.parse(x.responseText); } catch (e) {}
-      if (x.status === 200 && j && j.t1) { lvApply(j); LV.ok = true; LV.at = Date.now(); LV.err = ''; LV.fails = 0; }
+      if (x.status === 200 && j && j.t1) { lvApply(j); LV.ok = true; LV.at = Date.now(); LV.err = ''; LV.fails = 0; lvRosterSync(gid); }
       else lvFail(j && j.error ? j.error : (j ? 'Feed answered ' + x.status : 'nohost'));
       done();
     };
@@ -1415,7 +1454,6 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
           else if (S.role === 'screener') S.role = 'scorer';
         }
         break;
-      case 'echo': var ix = f.echoes.indexOf(v); if (ix >= 0) f.echoes.splice(ix, 1); else f.echoes.push(v); break;
       case 'clear': S.f = blankForm(); S.role = 'creator'; S.editId = null; break;
       case 'log': logPossession(g); break;
       case 'undo':
@@ -1436,8 +1474,10 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       case 'editDone': S.editId = null; S.f = blankForm(); S.tab = 'list'; break;
       case 'rosterEdit': S.rosterEdit = true; S.rosterDraft = g.roster.join(' '); break;
       case 'rosterCancel': S.rosterEdit = false; break;
-      case 'rosterSave': g.roster = parseRoster(S.rosterDraft); saveGame(g); S.rosterEdit = false; toast('Roster saved'); break;
+      case 'rosterSave': g.roster = parseRoster(S.rosterDraft); g.rosterManual = true; saveGame(g); S.rosterEdit = false; if (LV.gameId === g.id) lvRosterSync(g.id); toast('Roster saved'); break;
       case 'sumQ': S.sumQ = v; break;
+      case 'sumSrc': S.sumOpen[v] = !S.sumOpen[v]; break;
+      case 'sumAll': S.sumOpen = {}; if (v === '1') for (var si = 0; si < SOURCES.length; si++) S.sumOpen[SOURCES[si].id] = true; break;
       case 'exportCSV': saveFile(fileName(g, 'csv'), 'text/csv', csvFor(g)); return;
       case 'copyCSV': copyText(csvFor(g)); return;
       case 'exportJSON': var eg = games[v]; if (eg) saveFile(fileName(eg, 'json'), 'application/json', JSON.stringify({ app: '89ers-courtside', version: 1, games: [eg] }, null, 1)); return;
