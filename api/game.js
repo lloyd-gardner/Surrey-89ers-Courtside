@@ -1,6 +1,6 @@
 // Relay for FIBA LiveStats (Genius Sports). The feed doesn't allow browsers on other sites to read it,
 // so the page asks this function instead: GET /api/game?id=2882445
-// It returns team names, score, clock and a trimmed play-by-play (shots, free throws, rebounds,
+// It returns team names, players (number + name), score, clock and a trimmed play-by-play (shots, free throws, rebounds,
 // turnovers, timeouts) in the compact format the page decodes.
 
 const FEED = id => `https://fibalivestats.dcd.shared.geniussports.com/data/${id}/data.json`;
@@ -50,7 +50,11 @@ module.exports = async (req, res) => {
 
   const team = t => {
     const m = (j.tm && j.tm[t]) || {};
-    return { name: m.name || `Team ${t}`, short: m.shortName || m.name || '', code: m.code || `T${t}`, score: m.score ?? 0 };
+    // Players: [shirt number, display name, family name] so the page can fill the roster and show names.
+    const pl = Object.values(m.pl || {})
+      .map(p => [String(p.shirtNumber ?? '').trim(), p.scoreboardName || p.name || `${p.firstName || ''} ${p.familyName || ''}`.trim(), p.familyName || p.internationalFamilyName || ''])
+      .filter(p => p[0] !== '');
+    return { name: m.name || `Team ${t}`, short: m.shortName || m.name || '', code: m.code || `T${t}`, score: m.score ?? 0, pl };
   };
 
   res.status(200).json({
