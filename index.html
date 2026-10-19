@@ -130,6 +130,31 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .bar.thin{height:7px}
 .jersey .pn{display:block;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:0;line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px;opacity:.8}
 
+/* season */
+.seg-mode button{min-width:92px}
+.sum-grid .card,.sum-grid .stack{min-width:0}
+.sum-grid.season{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.sum-grid.season .tbl th,.sum-grid.season .tbl td{padding-left:6px;padding-right:6px}
+.spark{display:flex;align-items:flex-end;height:30px;min-width:96px}
+.spark i{flex:1;max-width:14px;margin-right:4px;border-radius:3px 3px 0 0;display:block}
+.spark i.nil{height:4px;background:var(--line);border-radius:2px}
+.tr-row.sel td,.gl-row.sel td{background:var(--raised)}
+.fc-chips{display:flex;flex-wrap:wrap;margin:-3px}
+.fc-chips .btn{margin:3px;min-height:38px;font-size:14px;border-radius:999px;padding:0 13px}
+.fc-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:10px;gap:10px}
+.fc-stats>div{background:var(--raised);border-radius:12px;padding:10px 12px;display:grid;grid-gap:3px;gap:3px;justify-items:start}
+.fc-big{font-family:var(--display);font-weight:700;font-size:32px;line-height:1}
+.fc-chart{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);grid-gap:10px;gap:10px;padding-top:4px}
+.fc-col{display:grid;grid-template-rows:auto 120px auto;justify-items:center;min-width:0}
+.fc-val{font-weight:700;font-size:14px;margin-bottom:4px}
+.fc-plot{width:100%;display:flex;align-items:flex-end;justify-content:center;border-bottom:1px solid var(--line)}
+.fc-plot i{display:block;width:60%;max-width:46px;border-radius:4px 4px 0 0}
+.fc-lbl{display:grid;justify-items:center;font-size:12px;margin-top:5px;text-align:center;max-width:100%}
+.fc-lbl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.fc-lbl span{color:var(--muted)}
+.fc-plot{position:relative}
+.fc-plot u{position:absolute;left:-5px;right:-5px;border-top:2px dashed var(--muted);z-index:1;pointer-events:none}
+
 /* list + tables */
 .tbl{width:100%;border-collapse:collapse;font-size:14px}
 .tbl th{text-align:left;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
@@ -214,10 +239,21 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .lv-in.small{width:72px;text-align:center;margin-right:10px}
 .lv-row{display:grid;grid-template-columns:62px minmax(0,1fr) auto;grid-gap:10px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line-soft)}
 .lv-row:last-child{border-bottom:0}
+.lv-row.ro{grid-template-columns:62px minmax(0,1fr)}
+/* game day playcall strip */
+.pc-strip{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);grid-gap:12px;gap:12px;align-items:center;padding:8px;margin-bottom:12px}
+.pc-strip .btn.lv-callbtn{min-height:60px;font-size:26px}
+.pc-recent{display:flex;align-items:center;flex-wrap:wrap;min-width:0;margin:-3px}
+.pc-recent>*{margin:3px}
+.pc-chip{display:inline-flex;align-items:center;min-height:44px;max-width:240px;border:1px solid var(--line);background:var(--raised);border-radius:999px;padding:0 14px;font-size:14px;color:var(--ink)}
+.pc-chip .num{color:var(--muted);margin-right:8px;white-space:nowrap}
+.pc-chip b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-chip.on{background:var(--accent-soft);border-color:var(--accent)}
+.pc-comp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);grid-gap:14px;gap:14px;margin:-4px 0 12px}
 .lv-link{border:0;background:none;padding:0;color:var(--accent);font-weight:600;text-decoration:underline;font-size:13px}
 
 @media (max-width: 900px){
-  .log-grid,.sum-grid,.home-grid,.lv-grid,.lv-g3,.gd-grid{grid-template-columns:minmax(0,1fr)}
+  .log-grid,.sum-grid,.sum-grid.season,.home-grid,.lv-grid,.lv-g3,.gd-grid,.pc-strip,.pc-comp{grid-template-columns:minmax(0,1fr)}
   .recent{grid-template-columns:minmax(0,1fr) 96px}
   .recent .rc:nth-child(n+2){display:none}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -246,7 +282,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   var OTHER = '#9085e9';
   var SOURCES = [
     { id: 'Transition', color: '#3987e5', early: true, finishes: ['One on One', 'Run Out', 'Turnover', 'Post Up', 'Spot Up', 'Drive and Kick'] },
-    { id: 'PNR', color: '#d95926', screen: true, cov: true, finishes: ['Drive and Kick', 'Drive and Dump', 'Roll Finish', 'Jumper', 'Pass Out', 'Pick and Pop', 'Drive', 'Spain', 'Cutter', 'Reject'] },
+    { id: 'PNR', color: '#d95926', screen: true, cov: true, finishes: ['Drive and Kick', 'Drive and Dump', 'Roll Finish', '2pt Jumper', '3pt Jumper', 'Pass Out', 'Pick and Pop', 'Drive', 'Spain', 'Reject'] },
     { id: '1-on-1', color: '#199e70', finishes: ['Drive and Dump', 'Drive and Kick', 'Drive Finish', 'Pull Up'] },
     { id: 'Post up', color: '#c98500', finishes: ['Middle hook', 'Baseline turn', 'Face-up J', 'Kick out', 'Cutter'] },
     { id: 'Off. rebound', color: '#d55181', early: true, finishes: ['Put back', 'Kick out', 'Reset'] },
@@ -322,7 +358,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
   // Finish names that have since been renamed. Games saved with the old names are updated when the app opens.
   var FINISH_RENAMES = {
-    PNR: { 'Roll man': 'Roll Finish', 'Pull-up': 'Jumper', 'Pass out': 'Pass Out', 'Pop': 'Pick and Pop', 'Drive middle': 'Drive', 'Drive baseline': 'Drive' },
+    PNR: { 'Roll man': 'Roll Finish', 'Pull-up': 'Jumper', 'Cutter': 'Pass Out', 'Pass out': 'Pass Out', 'Pop': 'Pick and Pop', 'Drive middle': 'Drive', 'Drive baseline': 'Drive' },
     Transition: { 'Run-out': 'Run Out', 'Off our TO': 'Turnover', 'Early 1-on-1': 'One on One', 'Spot up': 'Spot Up' },
     '1-on-1': { 'Pull-up': 'Pull Up' }
   };
@@ -331,6 +367,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     for (var i = 0; i < (g.poss || []).length; i++) {
       var p = g.poss[i], map = FINISH_RENAMES[p.src];
       if (map && p.fin && map[p.fin]) { p.fin = map[p.fin]; changed = true; }
+      // PNR Jumper is now split by shot value. Made shots go by the points scored; anything else is
+      // set to 2pt Jumper and flagged Needs detail so it can be checked on video.
+      if (p.src === 'PNR' && p.fin === 'Jumper') {
+        if (p.res === '3' || p.res === '3+1') p.fin = '3pt Jumper';
+        else { p.fin = '2pt Jumper'; if (p.res !== '2' && p.res !== '2+1') p.quick = true; }
+        changed = true;
+      }
       if (p.cov === 'Hedge') { p.cov = 'Flat'; changed = true; }
     }
     return changed;
@@ -381,7 +424,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       [1, 'PNR', 'Roll Finish', 'Middle', 'Drop', '2', null, '3', '11', '11', [5]],
       [1, '1-on-1', 'Drive Finish', 'L side', null, '2', null, '3', null, '3', [3]],
       [1, 'Transition', 'Run Out', null, null, '2', null, '7', null, '7', []],
-      [1, 'PNR', 'Jumper', 'Middle', 'Switch', 'Miss', null, '3', '11', '3', []],
+      [1, 'PNR', '3pt Jumper', 'Middle', 'Switch', 'Miss', null, '3', '11', '3', []],
       [1, 'Post up', 'Middle hook', null, null, '2', null, '23', null, '23', [4]],
       [1, 'PNR', 'Drive and Kick', 'R slot', 'Drop', '3', null, '3', '11', '14', [2]],
       [1, 'Off. rebound', 'Put back', null, null, '2', null, '11', null, '11', [1]],
@@ -399,8 +442,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       [2, 'Spot up', 'Catch & shoot', null, null, 'Miss', null, null, null, '32', []],
       [2, '1-on-1', 'Pull Up', null, null, '2', null, '3', null, '3', []],
       [2, 'Off. rebound', 'Kick out', null, null, '3', null, '11', null, '7', [1]],
-      [2, 'PNR', 'Jumper', 'L side', 'Ice', 'TO', null, '3', '11', null, []],
-      [2, 'PNR', 'Jumper', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]]
+      [2, 'PNR', '2pt Jumper', 'L side', 'Ice', 'TO', null, '3', '11', null, []],
+      [2, 'PNR', '2pt Jumper', 'Middle', 'Drop', '2', null, '3', '11', '3', [5]]
     ];
     var g = { id: 'sample', sample: true, opp: 'Example opponent', date: todayISO(), venue: 'Home',
       roster: ['0', '3', '5', '7', '11', '14', '21', '23', '32'], curQ: 'Q2', marks: { Q1: base, Q2: base + 14 * 60000 }, poss: [], created: Date.now() };
@@ -418,7 +461,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
   /* ---------- App state ---------- */
   var S = {
-    view: 'home', gameId: null, tab: 'quick', sumQ: 'All',
+    view: 'home', gameId: null, tab: 'quick', sumQ: 'All', sumMode: 'game', trendSrc: 'PNR',
     f: blankForm(), role: 'creator', editId: null,
     q: { src: null, fin: null, cov: null }, listFilter: 'all', sumOpen: {},
     confirm: null, newGame: { opp: '', date: todayISO(), venue: 'Home', roster: '', ls: '' },
@@ -451,6 +494,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 
   function render() {
     if (!(S.view === 'game' && G())) S.view = 'home';
+    if (LV.draft) lvKeepClock();
     lvSync();
     if (S.view === 'game') renderGame(); else renderHome();
   }
@@ -703,7 +747,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     var pick = sd ? '<b>' + esc(q.src + (q.fin ? ' › ' + q.fin : '') + (q.cov ? ' · ' + q.cov : '')) + '</b> · tap the result to log it' : 'Tap a source, then the result';
     var todo = needDetail(g);
 
-    return '<div class="gd-grid">' +
+    return lvCallStripHTML(g) + '<div class="gd-grid">' +
         '<section class="card stack" aria-label="What started it">' +
           '<div class="spread"><h2 class="h" style="font-size:21px">1 · Source</h2><span class="muted" style="font-size:13px">pts tonight</span></div>' +
           '<div class="gd-src">' + srcBtns + '</div>' +
@@ -775,10 +819,18 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   }
 
   function sumHTML(g) {
+    var qb = '', qs = ['All'].concat(QUARTERS), i;
+    for (i = 0; i < qs.length; i++) qb += '<button type="button" class="' + (S.sumQ === qs[i] ? 'on' : '') + '" data-a="sumQ" data-v="' + qs[i] + '">' + qs[i] + '</button>';
+    var mb = '<button type="button" class="' + (S.sumMode === 'game' ? 'on' : '') + '" data-a="sumMode" data-v="game">This game</button>' +
+      '<button type="button" class="' + (S.sumMode === 'season' ? 'on' : '') + '" data-a="sumMode" data-v="season">Season</button>';
+    var bar = '<div class="qbar" style="padding-top:0"><div class="seg seg-mode" role="group" aria-label="Summary scope">' + mb + '</div>' +
+      '<span class="lbl" style="margin-left:6px">Period</span><div class="seg" role="group" aria-label="Summary period">' + qb + '</div></div>';
+    return bar + (S.sumMode === 'season' ? seasonHTML(g) : sumGameHTML(g));
+  }
+
+  function sumGameHTML(g) {
     var ps = [], i, k;
     for (i = 0; i < g.poss.length; i++) if (S.sumQ === 'All' || g.poss[i].q === S.sumQ) ps.push(g.poss[i]);
-    var qb = '', qs = ['All'].concat(QUARTERS);
-    for (i = 0; i < qs.length; i++) qb += '<button type="button" class="' + (S.sumQ === qs[i] ? 'on' : '') + '" data-a="sumQ" data-v="' + qs[i] + '">' + qs[i] + '</button>';
 
     var tot = 0, early = 0, tos = 0, bySrc = {}, cov = {}, pl = {};
     function add(o, key, pts) { (o[key] = o[key] || { pts: 0, poss: 0 }); o[key].pts += pts; o[key].poss++; }
@@ -839,8 +891,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     }
     if (!plRows) plRows = '<tr><td colspan="4" class="muted">No players logged yet.</td></tr>';
 
-    return '<div class="qbar" style="padding-top:0"><span class="lbl" style="margin-right:10px">Period</span><div class="seg" role="group" aria-label="Summary period">' + qb + '</div></div>' +
-      '<div class="kpis">' +
+    return '<div class="kpis">' +
         kpi(tot, 'points conceded', n + ' possessions logged') +
         kpi(ppp(tot, n), 'points per possession', 'all sources') +
         kpi(tot ? Math.round(early / tot * 100) + '%' : '–', 'before our D was set', early + ' of ' + tot + ' pts (transition + off. rebounds)') +
@@ -854,9 +905,201 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
         '<div class="stack" style="grid-gap:12px;gap:12px">' +
           '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Who\'s hurting us</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Player</th><th class="r">Involved</th><th class="r">Created</th><th class="r">Scored</th></tr></thead><tbody>' + plRows + '</tbody></table></div>' +
           '<p class="hint" style="margin:8px 0 0">Involved counts points a player created or scored, once per possession.</p></section>' +
+          sumCallsHTML(g) +
           '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Screen coverages</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Action · coverage</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th></tr></thead><tbody>' + covRows + '</tbody></table></div></section>' +
         '</div>' +
       '</div>';
+  }
+
+  /* ---------- Season: every game logged on this iPad (not the sample) ---------- */
+  var TREND_N = 5;
+  function seasonGames() {
+    var out = [];
+    for (var i = 0; i < order.length; i++) { var g = games[order[i]]; if (g && !g.sample && g.poss.length) out.push(g); }
+    out.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.created || 0) - (b.created || 0); });
+    return out;
+  }
+  function inPeriod(p) { return S.sumQ === 'All' || p.q === S.sumQ; }
+  /* totals for a set of games: points and possessions by source, finish and coverage */
+  function aggGames(list) {
+    var a = { games: list.length, pts: 0, poss: 0, early: 0, tos: 0, src: {} };
+    function add(o, key, pts) { (o[key] = o[key] || { pts: 0, poss: 0 }); o[key].pts += pts; o[key].poss++; return o[key]; }
+    for (var i = 0; i < list.length; i++) for (var j = 0; j < list[i].poss.length; j++) {
+      var p = list[i].poss[j];
+      if (!inPeriod(p)) continue;
+      a.pts += p.pts; a.poss++; if (p.early) a.early += p.pts; if (p.res === 'TO') a.tos++;
+      var s = add(a.src, p.src, p.pts);
+      s.fin = s.fin || {}; s.cov = s.cov || {};
+      add(s.fin, p.fin || '', p.pts);
+      if (p.cov) add(s.cov, p.cov, p.pts);
+    }
+    return a;
+  }
+  function pppOf(o) { return o && o.poss ? o.pts / o.poss : null; }
+  function f2(v) { return v === null || v === undefined ? '–' : v.toFixed(2); }
+  function f1g(v) { return v === null || v === undefined ? '–' : (Math.round(v * 10) / 10).toFixed(1); }
+  /* lower is better on defence */
+  function chg(now, before, dp, unit, compact) {
+    if (now === null || before === null || now === undefined || before === undefined) return '<span class="lv-delta">–</span>';
+    var x = now - before, lim = dp === 2 ? 0.05 : 0.5;
+    if (Math.abs(x) < lim) return '<span class="lv-delta">Level</span>';
+    return '<span class="lv-delta ' + (x < 0 ? 'good' : 'bad') + '" title="' + (x < 0 ? 'better' : 'worse') + '">' + (x < 0 ? '▼ ' : '▲ ') + Math.abs(x).toFixed(dp) + (unit || '') + (compact ? '' : ' ' + (x < 0 ? 'better' : 'worse')) + '</span>';
+  }
+  function shortOpp(g) { return String(g.opp || '').split(/\s+/)[0].slice(0, 9); }
+  function shortDate(iso) { var p = String(iso || '').split('-'); return p.length === 3 ? Number(p[2]) + '/' + Number(p[1]) : ''; }
+
+  function seasonHTML(cur) {
+    var all = seasonGames(), i, k;
+    if (!all.length) return '<div class="empty" style="margin-top:4px">Season shows every game logged on this iPad. Nothing logged yet' + (cur.sample ? ' (the sample game isn\'t counted)' : '') + '.</div>';
+    var A = aggGames(all), n = all.length;
+    var last = all.slice(-TREND_N), before = all.slice(0, Math.max(0, all.length - TREND_N));
+    var cmpLabel = 'Last ' + last.length + ' games vs the ' + before.length + ' before';
+    if (!before.length && all.length >= 2) { last = all.slice(-1); before = all.slice(0, -1); cmpLabel = 'Latest game vs the ' + before.length + ' before it (last 5 vs earlier games starts after game ' + (TREND_N + 1) + ')'; }
+    var spark = all.slice(-TREND_N);
+    var L = aggGames(last), B = aggGames(before);
+    var perGame = spark.map(function (g) { return { g: g, a: aggGames([g]) }; });
+
+    // source order: season points
+    var keys = Object.keys(A.src).sort(function (a, b) { return A.src[b].pts - A.src[a].pts || A.src[b].poss - A.src[a].poss; });
+    function col(id) { return (srcDef(id) || { color: OTHER }).color; }
+
+    /* 1 · where they score, season average per game */
+    var maxPg = 0.1; for (i = 0; i < keys.length; i++) maxPg = Math.max(maxPg, A.src[keys[i]].pts / n);
+    var rows = '', allOpen = keys.length > 0;
+    for (i = 0; i < keys.length; i++) {
+      var id = keys[i], b = A.src[id], open = !!S.sumOpen[id];
+      if (!open) allOpen = false;
+      rows += '<tr class="sx-row' + (open ? ' open' : '') + '"><td style="white-space:nowrap"><button type="button" class="sx" data-a="sumSrc" data-v="' + esc(id) + '" aria-expanded="' + open + '">' +
+          '<span class="chev" aria-hidden="true">›</span><span class="dot" style="background:' + col(id) + ';margin-right:8px"></span>' + esc(id) + '</button></td>' +
+        '<td style="width:30%"><div class="bar"><span style="width:' + Math.round(b.pts / n / maxPg * 100) + '%;background:' + col(id) + '"></span></div></td>' +
+        '<td class="r num" style="font-weight:600">' + f1g(b.pts / n) + '</td><td class="r num muted">' + (A.pts ? Math.round(b.pts / A.pts * 100) : 0) + '%</td>' +
+        '<td class="r num muted">' + f1g(b.poss / n) + '</td><td class="r num" style="font-weight:600">' + f2(pppOf(b)) + '</td></tr>';
+      if (open) {
+        var fk = Object.keys(b.fin).sort(function (x, y) { return b.fin[y].pts - b.fin[x].pts || b.fin[y].poss - b.fin[x].poss; });
+        for (k = 0; k < fk.length; k++) {
+          var fb = b.fin[fk[k]];
+          rows += '<tr class="sx-sub"><td><span class="fin-nm' + (fk[k] ? '' : ' muted') + '">' + esc(fk[k] || 'No finish logged') + '</span></td>' +
+            '<td><div class="bar thin"><span style="width:' + Math.round(fb.pts / n / maxPg * 100) + '%;background:' + col(id) + ';opacity:.65"></span></div></td>' +
+            '<td class="r num">' + f1g(fb.pts / n) + '</td><td class="r num muted">' + (b.pts ? Math.round(fb.pts / b.pts * 100) : 0) + '%</td>' +
+            '<td class="r num muted">' + f1g(fb.poss / n) + '</td><td class="r num">' + f2(pppOf(fb)) + '</td></tr>';
+        }
+      }
+    }
+    if (!rows) rows = '<tr><td colspan="6" class="muted">Nothing logged for this period.</td></tr>';
+    var whereCard = '<section class="card"><div class="spread" style="margin-bottom:6px"><h2 class="h" style="font-size:21px">Where they score · season average</h2>' +
+        (keys.length ? '<button type="button" class="btn ghost" data-a="sumAll" data-v="' + (allOpen ? '0' : '1') + '" style="min-height:36px;font-size:13px">' + (allOpen ? 'Hide finishes' : 'Show all finishes') + '</button>' : '') + '</div>' +
+      '<div class="scroll-x"><table class="tbl"><thead><tr><th>Source › finish</th><th>Pts per game</th><th class="r">Pts/gm</th><th class="r">Share</th><th class="r">Poss/gm</th><th class="r">Pts/poss</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<p class="hint" style="margin:8px 0 0">Averages across ' + n + ' game' + (n === 1 ? '' : 's') + '. Share is the % of their logged points. Tap a source for its finishes.</p></section>';
+
+    /* 2 · trend table: every source, per-game pts/poss over the last 5, then last vs before */
+    var sMax = 1.5;
+    for (i = 0; i < perGame.length; i++) for (k in perGame[i].a.src) sMax = Math.max(sMax, Math.min(3, pppOf(perGame[i].a.src[k])));
+    var tr = '';
+    for (i = 0; i < keys.length; i++) {
+      var sid = keys[i], bars = '';
+      for (k = 0; k < perGame.length; k++) {
+        var o = perGame[k].a.src[sid], v = pppOf(o), gg = perGame[k].g;
+        var tip = 'vs ' + gg.opp + ' ' + niceDate(gg.date) + ': ' + (o ? f2(v) + ' pts/poss, ' + o.pts + ' pts on ' + o.poss + ' poss' : 'none logged');
+        bars += v === null ? '<i class="nil" title="' + esc(tip) + '"></i>' : '<i title="' + esc(tip) + '" style="height:' + Math.max(8, Math.min(100, v / sMax * 100)) + '%;background:' + col(sid) + '"></i>';
+      }
+      var lv = pppOf(L.src[sid]), bv = pppOf(B.src[sid]);
+      tr += '<tr class="tr-row' + (S.trendSrc === sid ? ' sel' : '') + '"><td style="white-space:nowrap"><button type="button" class="sx" data-a="trendSrc" data-v="' + esc(sid) + '"><span class="dot" style="background:' + col(sid) + ';margin-right:8px"></span>' + esc(sid) + '</button></td>' +
+        '<td><div class="spark" role="img" aria-label="' + esc(sid) + ' points per possession, last ' + perGame.length + ' games">' + bars + '</div></td>' +
+        '<td class="r num" style="font-weight:600">' + f2(lv) + '</td><td class="r num muted">' + f2(bv) + '</td><td class="r">' + chg(lv, bv, 2, '', true) + '</td></tr>';
+    }
+    var trendCard = '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:2px">Trend · last ' + spark.length + ' games</h2>' +
+      '<p class="hint" style="margin:0 0 6px">' + esc(cmpLabel) + '. Points per possession; lower is better (▼ green = better, ▲ red = worse). Tap a source to look closer.</p>' +
+      (before.length ? '' : '<p class="hint" style="margin:0 0 6px">Log a second game to see a comparison.</p>') +
+      '<div class="scroll-x"><table class="tbl"><thead><tr><th>Source</th><th>Each game</th><th class="r">Recent</th><th class="r">Before</th><th class="r">Change</th></tr></thead><tbody>' + tr + '</tbody></table></div>' +
+      '<p class="hint" style="margin:8px 0 0">Each game: one bar per game, oldest on the left. Tap and hold a bar for the numbers.</p></section>';
+
+    /* 3 · focus card for one source (PNR by default) */
+    var fs = A.src[S.trendSrc] ? S.trendSrc : (A.src.PNR ? 'PNR' : keys[0]);
+    var fsd = srcDef(fs) || {}, fL = L.src[fs], fB = B.src[fs], fc = col(fs);
+    var chips = '';
+    for (i = 0; i < keys.length; i++) chips += '<button type="button" class="btn ' + (keys[i] === fs ? 'on' : '') + '" data-a="trendSrc" data-v="' + esc(keys[i]) + '">' + esc(keys[i]) + '</button>';
+    var ref = pppOf(fB) !== null ? pppOf(fB) : pppOf(A.src[fs]);
+    var cMax = Math.max(1.5, ref || 0), gb = '';
+    for (i = 0; i < perGame.length; i++) { var oo = perGame[i].a.src[fs]; if (oo) cMax = Math.max(cMax, Math.min(3, pppOf(oo))); }
+    for (i = 0; i < perGame.length; i++) {
+      var og = perGame[i].a.src[fs], pv = pppOf(og), pg = perGame[i].g;
+      gb += '<div class="fc-col" title="' + esc('vs ' + pg.opp + ' ' + niceDate(pg.date) + (og ? ': ' + og.pts + ' pts on ' + og.poss + ' poss' : ': none logged')) + '">' +
+        '<div class="fc-val num">' + (pv === null ? '–' : f2(pv)) + '</div>' +
+        '<div class="fc-plot">' + (ref === null ? '' : '<u style="bottom:' + Math.min(100, ref / cMax * 100) + '%"></u>') + (pv === null ? '' : '<i style="height:' + Math.max(3, Math.min(100, pv / cMax * 100)) + '%;background:' + fc + '"></i>') + '</div>' +
+        '<div class="fc-lbl"><b>' + esc(shortOpp(pg)) + '</b><span class="num">' + esc(shortDate(pg.date)) + (og ? ' · ' + og.poss + ' poss' : '') + '</span></div></div>';
+    }
+    var refLine = ref === null ? '' : ' · dashed line = ' + (pppOf(fB) !== null ? 'before' : 'season') + ' average ' + f2(ref);
+    function subRows(field, label) {
+      var o = {}, kk, r = '';
+      for (kk in (fL && fL[field]) || {}) o[kk] = 1;
+      for (kk in (fB && fB[field]) || {}) o[kk] = 1;
+      var ks = Object.keys(o).sort(function (a, b) { return (((fL && fL[field][b]) || {}).poss || 0) - (((fL && fL[field][a]) || {}).poss || 0); });
+      for (var j = 0; j < ks.length; j++) {
+        var l = fL && fL[field][ks[j]], bb = fB && fB[field][ks[j]];
+        r += '<tr><td>' + esc(ks[j] || 'No finish logged') + '</td><td class="r num muted">' + (l ? f1g(l.poss / last.length) : '–') + '</td>' +
+          '<td class="r num" style="font-weight:600">' + f2(pppOf(l)) + '</td><td class="r num muted">' + f2(pppOf(bb)) + '</td><td class="r">' + chg(pppOf(l), pppOf(bb), 2) + '</td></tr>';
+      }
+      if (!r) return '';
+      return '<div class="scroll-x"><table class="tbl"><thead><tr><th>' + label + '</th><th class="r">Poss/gm</th><th class="r">Recent</th><th class="r">Before</th><th class="r">Change</th></tr></thead><tbody>' + r + '</tbody></table></div>';
+    }
+    var lpg = fL ? fL.pts / last.length : (last.length ? 0 : null), bpg = before.length ? (fB ? fB.pts / before.length : 0) : null;
+    var lsh = L.pts ? (fL ? fL.pts : 0) / L.pts * 100 : null, bsh = B.pts ? (fB ? fB.pts : 0) / B.pts * 100 : null;
+    var focus = '<section class="card stack" aria-label="' + esc(fs) + ' defence">' +
+      '<div class="spread"><h2 class="h" style="font-size:21px"><span class="dot" style="background:' + fc + ';margin-right:8px;vertical-align:2px"></span>' + esc(fs) + ' defence</h2>' +
+        '<span class="muted" style="font-size:13px">' + esc(cmpLabel.split(' (')[0]) + '</span></div>' +
+      '<div class="fc-chips">' + chips + '</div>' +
+      '<div class="fc-stats">' +
+        '<div><span class="lbl">Pts/poss</span><div class="fc-big num">' + f2(pppOf(fL)) + '</div><div class="muted num" style="font-size:13px">before ' + f2(pppOf(fB)) + '</div>' + chg(pppOf(fL), pppOf(fB), 2) + '</div>' +
+        '<div><span class="lbl">Pts per game</span><div class="fc-big num">' + f1g(lpg) + '</div><div class="muted num" style="font-size:13px">before ' + f1g(bpg) + '</div>' + chg(lpg, bpg, 1) + '</div>' +
+        '<div><span class="lbl">Share of their pts</span><div class="fc-big num">' + (lsh === null ? '–' : Math.round(lsh) + '%') + '</div><div class="muted num" style="font-size:13px">before ' + (bsh === null ? '–' : Math.round(bsh) + '%') + '</div>' + chg(lsh, bsh, 0, '%') + '</div>' +
+      '</div>' +
+      '<div><div class="lbl" style="margin-bottom:6px">Pts/poss each game · last ' + perGame.length + '<span style="text-transform:none;letter-spacing:0;font-weight:500">' + refLine + '</span></div><div class="fc-chart">' + gb + '</div></div>' +
+      (fsd.cov ? subRows('cov', 'Our coverage') : '') +
+      subRows('fin', 'Finish') +
+      '</section>';
+
+    /* 4 · game log */
+    var gl = '';
+    for (i = all.length - 1; i >= 0; i--) {
+      var G1 = all[i], a1 = aggGames([G1]), top = '', tp = -1;
+      for (k in a1.src) if (a1.src[k].pts > tp) { tp = a1.src[k].pts; top = k; }
+      gl += '<tr class="gl-row' + (G1.id === cur.id ? ' sel' : '') + '"><td style="white-space:nowrap"><button type="button" class="sx" data-a="openSum" data-v="' + G1.id + '">' + esc(G1.opp) + '</button>' +
+          '<div class="muted num" style="font-size:12px">' + esc(niceDate(G1.date)) + ' · ' + esc(G1.venue) + '</div></td>' +
+        '<td class="r num" style="font-weight:600">' + a1.pts + '</td><td class="r num muted">' + a1.poss + '</td><td class="r num">' + f2(pppOf(a1)) + '</td>' +
+        '<td class="r num">' + f2(pppOf(a1.src.PNR)) + '</td><td>' + (top ? '<span class="dot" style="background:' + col(top) + ';margin-right:6px"></span>' + esc(top) : '–') + '</td></tr>';
+    }
+    var logCard = '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Games logged</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Opponent</th><th class="r">Pts</th><th class="r">Poss</th><th class="r">Pts/poss</th><th class="r">PNR</th><th>Top</th></tr></thead><tbody>' + gl + '</tbody></table></div>' +
+      '<p class="hint" style="margin:8px 0 0">Tap a game to open its summary. PNR = their pts/poss out of PNR.</p></section>';
+
+    return '<div class="kpis">' +
+        kpi(n, n === 1 ? 'game logged' : 'games logged', A.poss + ' possessions' + (cur.sample ? '' : '') + (S.sumQ === 'All' ? '' : ' in ' + S.sumQ)) +
+        kpi(f1g(A.pts / n), 'points conceded per game', 'from logged possessions') +
+        kpi(f2(pppOf(A)), 'points per possession', 'last ' + last.length + ': ' + f2(pppOf(L)) + (before.length ? ' · before: ' + f2(pppOf(B)) : '')) +
+        kpi(A.pts ? Math.round(A.early / A.pts * 100) + '%' : '–', 'before our D was set', 'transition + off. rebounds') +
+      '</div>' +
+      '<div class="sum-grid season">' +
+        '<div class="stack" style="grid-gap:12px;gap:12px;min-width:0">' + whereCard + focus + '</div>' +
+        '<div class="stack" style="grid-gap:12px;gap:12px;min-width:0">' + trendCard + logCard + '</div>' +
+      '</div>';
+  }
+  /* their playcalls, grouped by call, with every quarter + clock stamp for finding them on video */
+  function sumCallsHTML(g) {
+    var cs = lvSortedCalls(g, true), by = {}, ord = [], i;
+    for (i = 0; i < cs.length; i++) {
+      var c = cs[i], q = c.per <= 4 ? 'Q' + c.per : 'OT';
+      if (S.sumQ !== 'All' && S.sumQ !== q) continue;
+      var k = c.call.toLowerCase();
+      if (!by[k]) { by[k] = { name: c.call, at: [] }; ord.push(k); }
+      by[k].at.push(lvPerLabel(c.per) + ' ' + lvClock(c.rem));
+    }
+    ord.sort(function (a, b) { return by[b].at.length - by[a].at.length; });
+    var rows = '';
+    for (i = 0; i < ord.length; i++) {
+      var x = by[ord[i]];
+      rows += '<tr><td style="font-weight:600">' + esc(x.name) + '</td><td class="r num" style="font-weight:600">' + x.at.length + '</td><td class="num muted" style="font-size:13px">' + esc(x.at.join(' · ')) + '</td></tr>';
+    }
+    if (!rows) rows = '<tr><td colspan="3" class="muted">No playcalls logged for this period.</td></tr>';
+    return '<section class="card"><h2 class="h" style="font-size:21px;margin-bottom:6px">Their playcalls</h2><div class="scroll-x"><table class="tbl"><thead><tr><th>Call</th><th class="r">Times</th><th>When</th></tr></thead><tbody>' + rows + '</tbody></table></div></section>';
   }
   function kpi(v, label, sub) {
     return '<div class="card kpi"><div class="v num">' + v + '</div><div style="font-weight:600;margin-top:4px">' + label + '</div><div class="muted" style="font-size:13px">' + esc(sub) + '</div></div>';
@@ -1008,7 +1251,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     if (JSON.stringify(names) === JSON.stringify(g.names || {}) && roster.join(' ') === g.roster.join(' ')) return;
     g.names = names; g.roster = roster;
     saveGame(g);
-    if (S.view === 'game' && S.gameId === gid && S.tab !== 'live' && !S.rosterEdit) {
+    if (S.view === 'game' && S.gameId === gid && S.tab !== 'live' && !S.rosterEdit && !LV.draft) {
       var ae = document.activeElement;
       if (!(ae && ae.tagName === 'INPUT')) render();
     }
@@ -1218,36 +1461,60 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
     return (g.calls || []).slice().sort(function (a, b) { var x = lvElapsed(d, a.per, a.rem) - lvElapsed(d, b.per, b.rem); return asc ? x : -x; });
   }
 
-  function lvCallsHTML(g) {
-    var dr = LV.draft, n = lvNow(g), i, comp = '';
-    if (dr) {
-      var maxPer = Math.max(5, dr.per), pb = '', bk = lvBook(g), bh = '';
-      for (i = 1; i <= maxPer; i++) pb += '<button type="button" class="' + (dr.per === i ? 'on' : '') + '" data-a="lvPer" data-v="' + i + '">' + lvPerLabel(i) + '</button>';
-      for (i = 0; i < bk.length; i++) bh += '<button type="button" class="btn ' + (dr.call === bk[i] ? 'on' : '') + '" data-a="lvBook" data-v="' + esc(bk[i]) + '">' + esc(bk[i]) + '</button>';
-      comp = '<div class="lv-comp stack">' +
+  /* composer for a new or edited playcall (Game day only) */
+  function lvComposerHTML(g) {
+    var dr = LV.draft, i;
+    if (!dr) return '';
+    var maxPer = Math.max(5, dr.per), pb = '', bk = lvBook(g), bh = '', dk = dr.id ? 'lvdel:' + dr.id : '';
+    for (i = 1; i <= maxPer; i++) pb += '<button type="button" class="' + (dr.per === i ? 'on' : '') + '" data-a="lvPer" data-v="' + i + '">' + lvPerLabel(i) + '</button>';
+    for (i = 0; i < bk.length; i++) bh += '<button type="button" class="btn ' + (dr.call === bk[i] ? 'on' : '') + '" data-a="lvBook" data-v="' + esc(bk[i]) + '">' + esc(bk[i]) + '</button>';
+    return '<div class="lv-comp pc-comp" aria-label="' + (dr.id ? 'Edit playcall' : 'New playcall') + '">' +
+      '<div class="pc-c1 stack">' +
+        '<div class="lbl">' + (dr.id ? 'Edit playcall' : 'New playcall') + '</div>' +
         '<div class="lv-stamprow"><div class="seg" role="group" aria-label="Quarter">' + pb + '</div>' +
           '<input class="lv-in lv-clockin num" id="lv-clock" type="text" inputmode="numeric" autocomplete="off" data-lvclock="1" value="' + lvClock(dr.rem) + '" aria-label="Game clock, minutes and seconds"></div>' +
-        '<div class="hint">Tap the clock to change it. Type 531 for 5:31.</div>' +
+        '<div class="hint">Tap the clock to change it. Type 531 for 5:31.</div></div>' +
+      '<div class="pc-c2 stack">' +
         '<input class="lv-in" id="lv-call" type="text" autocomplete="off" autocapitalize="words" enterkeyhint="done" data-lvd="call" value="' + esc(dr.call) + '" placeholder="Playcall, or leave blank to name it later" aria-label="Playcall">' +
         (bh ? '<div class="lv-chips">' + bh + '</div>' : '<div class="hint">Playcalls you name are kept for the next game against ' + esc(lvOppKey(g)) + '.</div>') +
         '<input class="lv-in" id="lv-note" type="text" autocomplete="off" data-lvd="note" value="' + esc(dr.note) + '" placeholder="Note (optional): who it was for, result" aria-label="Note">' +
-        '<div class="g2"><button type="button" class="btn big" data-a="lvCancel">Discard</button><button type="button" class="btn big primary" data-a="lvSave">Save playcall</button></div></div>';
+        '<div class="' + (dr.id ? 'g3' : 'g2') + '" style="grid-gap:8px;gap:8px">' +
+          (dr.id ? '<button type="button" class="btn big ' + (S.confirm === dk ? 'warn' : '') + '" data-a="lvDel" data-v="' + dr.id + '">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button>' : '') +
+          '<button type="button" class="btn big" data-a="lvCancel">' + (dr.id ? 'Cancel' : 'Discard') + '</button>' +
+          '<button type="button" class="btn big primary" data-a="lvSave">Save playcall</button></div></div>' +
+      '</div>';
+  }
+
+  /* Game day: the PLAYCALL button, the last few calls (tap one to edit), and the composer */
+  function lvCallStripHTML(g) {
+    var n = lvNow(g), calls = lvSortedCalls(g, false), chips = '', i;
+    for (i = 0; i < calls.length && i < 4; i++) {
+      var c = calls[i], on = LV.draft && LV.draft.id === c.id;
+      chips += '<button type="button" class="pc-chip ' + (on ? 'on' : '') + '" data-a="lvEdit" data-v="' + c.id + '">' +
+        '<span class="num">' + lvPerLabel(c.per) + ' ' + lvClock(c.rem) + '</span><b>' + esc(c.call) + '</b></button>';
     }
-    var calls = lvSortedCalls(g, false), rows = '';
+    if (!chips) chips = '<span class="hint">Tap PLAYCALL the moment they signal a play. Quarter and clock fill in from LiveStats when it\'s connected; name it now or later.</span>';
+    return '<section class="card pc-strip" aria-label="Their playcalls">' +
+        '<button type="button" class="btn lv-callbtn" data-a="lvCall"><span>PLAYCALL</span><span class="num" id="lv-stamp">' + lvPerLabel(n.per) + ' ' + lvClock(n.rem) + '</span></button>' +
+        '<div class="pc-recent"><div class="lbl" style="margin-right:4px;white-space:nowrap">Their calls <span class="num" style="color:var(--ink)">' + (g.calls || []).length + '</span></div>' + chips + '</div>' +
+      '</section>' + lvComposerHTML(g);
+  }
+
+  /* read-only list of their calls, for Live */
+  function lvCallsHTML(g) {
+    var calls = lvSortedCalls(g, false), rows = '', i;
     for (i = 0; i < calls.length; i++) {
-      var c = calls[i], dk = 'lvdel:' + c.id;
-      rows += '<div class="lv-row"><div class="num"><b style="font-size:17px">' + lvClock(c.rem) + '</b><div class="lbl">' + lvPerLabel(c.per) + '</div></div>' +
+      var c = calls[i];
+      rows += '<div class="lv-row ro"><div class="num"><b style="font-size:17px">' + lvClock(c.rem) + '</b><div class="lbl">' + lvPerLabel(c.per) + '</div></div>' +
         '<div style="min-width:0"><div style="font-weight:600;overflow-wrap:break-word">' + esc(c.call) + '</div>' +
-          (c.note ? '<div class="muted" style="font-size:13px">' + esc(c.note) + '</div>' : '') + '</div>' +
-        '<div class="row"><button type="button" class="btn ghost" data-a="lvEdit" data-v="' + c.id + '" style="min-height:40px">Edit</button>' +
-        '<button type="button" class="btn ' + (S.confirm === dk ? 'warn' : 'ghost') + '" data-a="lvDel" data-v="' + c.id + '" style="min-height:40px">' + (S.confirm === dk ? 'Tap again' : 'Delete') + '</button></div></div>';
+          (c.note ? '<div class="muted" style="font-size:13px">' + esc(c.note) + '</div>' : '') + '</div></div>';
     }
-    if (!rows) rows = '<div class="empty">Tap PLAYCALL the moment they signal a play. The quarter and game clock fill in from the feed; change the clock if you need to, name it now or later, and find it on video after.</div>';
+    if (!rows) rows = '<div class="empty">No playcalls yet. Log them with the PLAYCALL button on Game day.</div>';
     return '<section class="card stack" aria-label="Their play calls">' +
-      '<div class="spread"><h2 class="h" style="font-size:21px">Their playcalls</h2><span class="muted num" style="font-size:13px">' + (g.calls || []).length + ' logged</span></div>' +
-      '<button type="button" class="btn big lv-callbtn" data-a="lvCall"><span>PLAYCALL</span><span class="num" id="lv-stamp">' + lvPerLabel(n.per) + ' ' + lvClock(n.rem) + '</span></button>' +
-      comp + '<div>' + rows + '</div>' +
-      '<div class="g2"><button type="button" class="btn" data-a="lvCopy">Copy list</button><button type="button" class="btn" data-a="lvCSV">Export CSV</button></div>' +
+      '<div class="spread"><h2 class="h" style="font-size:21px">Their playcalls</h2><span class="muted num" style="font-size:13px">' + calls.length + ' logged</span></div>' +
+      '<div>' + rows + '</div>' +
+      '<p class="hint" style="margin:0">Logged and edited on Game day.</p>' +
+      (calls.length ? '<div class="g2"><button type="button" class="btn" data-a="lvCopy">Copy list</button><button type="button" class="btn" data-a="lvCSV">Export CSV</button></div>' : '') +
       '</section>';
   }
 
@@ -1256,11 +1523,11 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       return '<section class="card stack" style="max-width:640px" aria-label="Connect to LiveStats">' +
         '<h2 class="h" style="font-size:21px">Connect this game to LiveStats</h2>' +
         '<p class="hint" style="margin:0">Paste the game\'s LiveStats link (like fibalivestats…/u/SLB/2882445/) or just the game number. ' +
-          'You get live targets, team ratings and four factors, plus a log of their play calls stamped with the game clock. Needs the iPad\'s data connection.</p>' +
+          'You get live targets, team ratings and four factors, and playcalls logged on Game day get stamped with the game clock. Needs the iPad\'s data connection.</p>' +
         '<div class="field"><label class="lbl" for="lv-link">LiveStats link or game number</label>' +
           '<input id="lv-link" class="lv-in" type="text" inputmode="url" autocomplete="off" data-lvlink="1" value="' + esc(S.lvLink || '') + '" placeholder="https://fibalivestats.dcd.shared.geniussports.com/u/SLB/…"></div>' +
         '<button type="button" class="btn big primary" data-a="lvConnect">Connect</button>' +
-      '</section>';
+      '</section>' + ((g.calls || []).length ? '<div style="max-width:640px;margin-top:12px">' + lvCallsHTML(g) + '</div>' : '');
     }
     return '<div class="card lv-top" id="lv-bar">' + lvBarHTML(g) + '</div>' +
       '<div class="lv-grid">' +
@@ -1273,7 +1540,10 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
   /* live refresh without rebuilding the page, so typing in the call box isn't interrupted */
   function lvRefresh() {
     var g = G();
-    if (S.view !== 'game' || S.tab !== 'live' || !g) return;
+    if (S.view !== 'game' || !g) return;
+    var stamp0 = document.getElementById('lv-stamp');
+    if (stamp0) { var n0 = lvNow(g); stamp0.textContent = lvPerLabel(n0.per) + ' ' + lvClock(n0.rem); }
+    if (S.tab !== 'live') return;
     var bar = document.getElementById('lv-bar'), stats = document.getElementById('lv-stats'), stamp = document.getElementById('lv-stamp');
     if (bar) bar.innerHTML = lvBarHTML(g);
     var ae = document.activeElement;
@@ -1384,6 +1654,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       case 'lvCancel': LV.draft = null; return true;
       case 'lvSave': return lvSaveDraft(g);
       case 'lvEdit':
+        if (dr && dr.id === v) { LV.draft = null; return true; }
         var cs = g.calls || [];
         for (var i = 0; i < cs.length; i++) if (cs[i].id === v) {
           LV.draft = { id: cs[i].id, per: cs[i].per, rem: cs[i].rem, call: cs[i].call === 'Unknown' ? '' : cs[i].call, note: cs[i].note || '', at: cs[i].at };
@@ -1392,7 +1663,7 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       case 'lvDel':
         if (S.confirm === 'lvdel:' + v) {
           g.calls = (g.calls || []).filter(function (c) { return c.id !== v; });
-          saveGame(g); S.confirm = null; toast('Call deleted');
+          saveGame(g); S.confirm = null; if (LV.draft && LV.draft.id === v) LV.draft = null; toast('Call deleted');
         } else armConfirm('lvdel:' + v);
         return true;
       case 'lvCopy':
@@ -1476,6 +1747,9 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
       case 'rosterCancel': S.rosterEdit = false; break;
       case 'rosterSave': g.roster = parseRoster(S.rosterDraft); g.rosterManual = true; saveGame(g); S.rosterEdit = false; if (LV.gameId === g.id) lvRosterSync(g.id); toast('Roster saved'); break;
       case 'sumQ': S.sumQ = v; break;
+      case 'sumMode': S.sumMode = v; break;
+      case 'trendSrc': S.trendSrc = v; break;
+      case 'openSum': if (games[v]) { S.gameId = v; S.sumMode = 'game'; S.tab = 'sum'; S.q = { src: null, fin: null, cov: null }; S.f = blankForm(); S.editId = null; LV.draft = null; window.scrollTo(0, 0); } break;
       case 'sumSrc': S.sumOpen[v] = !S.sumOpen[v]; break;
       case 'sumAll': S.sumOpen = {}; if (v === '1') for (var si = 0; si < SOURCES.length; si++) S.sumOpen[SOURCES[si].id] = true; break;
       case 'exportCSV': saveFile(fileName(g, 'csv'), 'text/csv', csvFor(g)); return;
